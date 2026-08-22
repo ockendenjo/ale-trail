@@ -1,0 +1,50 @@
+name: UI
+
+on:
+  workflow_call:
+    secrets:
+      AWS_ROLE_ARN:
+        required: false
+      WEB_BUCKET:
+        required: false
+    inputs:
+      environment:
+        description: 'Environment name'
+        required: true
+        type: string
+      upload_ui:
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    timeout-minutes: 2
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # OIDC authentication with AWS
+      contents: read
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Assume role
+        if: inputs.upload_ui
+        uses: aws-actions/configure-aws-credentials@517a711dbcd0e402f90c77e7e2f81e849156e31d # v6.2.2
+        with:
+          aws-region: 'eu-west-1'
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+
+      - name: Upload
+        if: inputs.upload_ui
+        working-directory: src
+        run: |
+          aws s3 sync src/ s3://${INPUTS_BUCKET}
+        env:
+          INPUTS_BUCKET: ${{ secrets.WEB_BUCKET }}
