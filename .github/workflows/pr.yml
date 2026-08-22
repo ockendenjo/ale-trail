@@ -10,6 +10,16 @@ permissions:
   contents: read
 
 jobs:
+  ui:
+    name: UI
+    uses: ./.github/workflows/ui.yaml
+    permissions:
+      contents: read
+      id-token: write # OIDC authentication with AWS
+    with:
+      environment: dev
+      upload_ui: false
+
   validate:
     name: Validate
     uses: ./.github/workflows/validate.yaml
