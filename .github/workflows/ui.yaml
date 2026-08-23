@@ -32,7 +32,29 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          fetch-depth: 0
           persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: src/.nvmrc
+
+      - name: Install Node modules
+        working-directory: src
+        run: npm install
+
+      - name: Check formatting
+        working-directory: src
+        run: npx prettier --check .
+
+      - name: Check linting
+        working-directory: src
+        run: npx eslint
+
+      - name: Build
+        working-directory: src
+        run: npx ng build --configuration production
 
       - name: Assume role
         if: inputs.upload_ui
@@ -44,6 +66,6 @@ jobs:
       - name: Upload
         if: inputs.upload_ui
         run: |
-          aws s3 sync src/ s3://${INPUTS_BUCKET}
+          aws s3 sync src/dist/ale-trail/browser/ s3://${INPUTS_BUCKET}
         env:
           INPUTS_BUCKET: ${{ secrets.WEB_BUCKET }}
