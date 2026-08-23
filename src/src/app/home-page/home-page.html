@@ -1,0 +1,9 @@
+<div class="p-2 pt-4">
+    <div class="flex flex-row flex-wrap">
+        @for (c of cards; track c.date) {
+            <div class="card">
+                {{ getDay(c) }}
+            </div>
+        }
+    </div>
+</div>
