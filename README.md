@@ -13,7 +13,15 @@ terraform apply -var-file=tfvars/dev.auto.tfvars -auto-approve
 
 ### format
 
-requires: format-tf
+requires: format-tf, format-ng
+
+### format-ng
+
+directory: src
+
+```shell
+npx prettier --write .
+```
 
 ### format-tf
 
@@ -60,4 +68,12 @@ environment: AWS_PROFILE=aletrail
 
 ```shell
 terraform plan -var-file=tfvars/dev.auto.tfvars
+```
+
+### serve
+
+directory: src
+
+```shell
+npm run start
 ```
