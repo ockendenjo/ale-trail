@@ -1,7 +1,9 @@
 import {Component} from "@angular/core";
+import {CardComponent} from "../card/card.component";
+import {Card} from "../card/card.type";
 
 @Component({
-    imports: [],
+    imports: [CardComponent],
     selector: "app-home-page",
     styleUrl: "./home-page.css",
     templateUrl: "./home-page.html",
@@ -33,16 +35,4 @@ export class HomePage {
         {date: "2026-12-15"},
         {date: "2026-12-16"},
     ];
-
-    public getDay(c: Card): string {
-        const day = c.date.split("-")[2];
-        if (day.startsWith("0")) {
-            return day.substring(1);
-        }
-        return day;
-    }
-}
-
-interface Card {
-    date: string;
 }
