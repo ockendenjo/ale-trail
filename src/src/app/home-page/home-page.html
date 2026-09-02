@@ -1,9 +1,7 @@
 <div class="p-2 pt-4">
     <div class="grid 2xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-2">
         @for (c of cards; track c.date) {
-            <div class="card aspect-4/3 flex items-center justify-center text-8xl">
-                {{ getDay(c) }}
-            </div>
+            <app-card [card]="c"></app-card>
         }
     </div>
 </div>
