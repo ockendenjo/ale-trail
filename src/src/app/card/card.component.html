@@ -1,4 +1,10 @@
-<div class="card aspect-4/3 flex flex-col items-center justify-center">
+<div class="aspect-4/3 flex flex-col items-center" [ngClass]="{locked: card.locked, unlocked: !card.locked}">
+    @if (card.locked) {
+        <img src="lock.svg" alt="Lock" class="p-2 w-10 h-10" />
+    } @else {
+        <div class="p-2 w-10 h-10">&nbsp;</div>
+    }
+
     <div class="text-8xl">
         {{ getDay(card) }}
     </div>

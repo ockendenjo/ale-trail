@@ -1,8 +1,9 @@
 import {Component, Input} from "@angular/core";
 import {Card} from "./card.type";
+import {NgClass} from "@angular/common";
 
 @Component({
-    imports: [],
+    imports: [NgClass],
     selector: "app-card",
     styleUrl: "./card.component.css",
     templateUrl: "./card.component.html",
