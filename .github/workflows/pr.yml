@@ -12,7 +12,7 @@ permissions:
 jobs:
   ui:
     name: UI
-    uses: ./.github/workflows/ui.yaml
+    uses: $/.github/workflows/ui.yaml
     permissions:
       contents: read
       id-token: write # OIDC authentication with AWS
@@ -22,14 +22,14 @@ jobs:
 
   validate:
     name: Validate
-    uses: ./.github/workflows/validate.yaml
+    uses: $/.github/workflows/validate.yaml
 
   tf-plan:
     name: Terraform
     permissions:
       id-token: write # OIDC authentication with AWS
       contents: read
-    uses: ./.github/workflows/tf-plan.yaml
+    uses: $/.github/workflows/tf-plan.yaml
     secrets:
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
       STATE_BUCKET: ${{ secrets.STATE_BUCKET }}
