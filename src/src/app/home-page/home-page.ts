@@ -10,6 +10,13 @@ import {Card} from "../card/card.type";
 })
 export class HomePage {
     public cards: Card[] = [
+        {date: "2026-11-16", locked: false},
+        {date: "2026-11-17", locked: false},
+        {date: "2026-11-18", locked: false},
+        {date: "2026-11-19", locked: false},
+        {date: "2026-11-20", locked: false},
+        {date: "2026-11-21", locked: false},
+        {date: "2026-11-22", locked: false},
         {date: "2026-11-23", locked: false},
         {date: "2026-11-24", locked: false},
         {date: "2026-11-25", locked: true},
@@ -26,13 +33,6 @@ export class HomePage {
         {date: "2026-12-06", locked: true},
         {date: "2026-12-07", locked: true},
         {date: "2026-12-08", locked: true},
-        {date: "2026-12-09", locked: true},
-        {date: "2026-12-10", locked: true},
-        {date: "2026-12-11", locked: true},
-        {date: "2026-12-12", locked: true},
-        {date: "2026-12-13", locked: true},
-        {date: "2026-12-14", locked: true},
-        {date: "2026-12-15", locked: true},
-        {date: "2026-12-16", locked: true},
+        {date: "2026-12-09", locked: true}
     ];
 }
