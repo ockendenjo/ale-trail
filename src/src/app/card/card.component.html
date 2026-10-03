@@ -3,7 +3,12 @@
     [ngClass]="{locked: card.locked, unlocked: !card.locked}"
 >
     @if (card.locked) {
-        <img src="lock.svg" alt="Lock" class="p-2 w-10 h-10" />
+        <div class="flex flex-row items-center">
+            <img src="lock.svg" alt="Lock" class="p-2 w-10 h-10" />
+            @if (card.releaseType == "TIMED") {
+                Revealed at {{ card.releaseTime }}
+            }
+        </div>
     } @else {
         <div class="p-2 w-10 h-10">&nbsp;</div>
     }
