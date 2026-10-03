@@ -1,4 +1,7 @@
-<div class="aspect-4/3 flex flex-col items-center justify-between" [ngClass]="{locked: card.locked, unlocked: !card.locked}">
+<div
+    class="aspect-4/3 flex flex-col items-center justify-between"
+    [ngClass]="{locked: card.locked, unlocked: !card.locked}"
+>
     @if (card.locked) {
         <img src="lock.svg" alt="Lock" class="p-2 w-10 h-10" />
     } @else {
@@ -6,11 +9,11 @@
     }
 
     <div class="flex flex-col items-center mb-2">
-    <div class="text-8xl">
-        {{ getDay(card) }}
-    </div>
-    <div class="text-2xl">
-        {{ getMonth(card) }}
-    </div>
+        <div class="text-8xl">
+            {{ getDay(card) }}
+        </div>
+        <div class="text-2xl">
+            {{ getMonth(card) }}
+        </div>
     </div>
 </div>

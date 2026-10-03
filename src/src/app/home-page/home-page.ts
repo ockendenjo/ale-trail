@@ -33,6 +33,6 @@ export class HomePage {
         {date: "2026-12-06", locked: true},
         {date: "2026-12-07", locked: true},
         {date: "2026-12-08", locked: true},
-        {date: "2026-12-09", locked: true}
+        {date: "2026-12-09", locked: true},
     ];
 }
