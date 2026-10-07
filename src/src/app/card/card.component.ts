@@ -22,6 +22,8 @@ export class CardComponent {
     public getMonth(c: Card): string {
         const month = c.date.split("-")[1];
         switch (month) {
+            case "10":
+                return "OCT";
             case "11":
                 return "NOV";
             case "12":

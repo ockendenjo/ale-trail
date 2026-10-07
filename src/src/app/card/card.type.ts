@@ -4,12 +4,19 @@ interface BaseCard {
 }
 
 interface RandomCard extends BaseCard {
+    locked: true;
     releaseType: "RANDOM";
 }
 
 interface TimedCard extends BaseCard {
+    locked: true;
     releaseType: "TIMED";
     releaseTime: string;
 }
 
-export type Card = RandomCard | TimedCard;
+interface UnlockedCard extends BaseCard {
+    locked: false;
+    image: string;
+}
+
+export type Card = UnlockedCard | RandomCard | TimedCard;
