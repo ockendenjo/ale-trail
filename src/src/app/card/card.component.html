@@ -19,10 +19,8 @@
         </div>
     </div>
 } @else {
-    <div class="aspect-4/3">
-        <div class="img-container">
-            <img [src]="card.image" style="max-width: 100%" />
-        </div>
+    <div class="aspect-4/3 cc">
+        <img [src]="card.image" alt="Day image" />
         <div class="date-container">{{ getDay(card) }} {{ getMonth(card) }}</div>
     </div>
 }
