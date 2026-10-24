@@ -7,31 +7,6 @@
     opacity: 0.5;
 }
 
-.cc {
-    position: relative;
-    overflow: hidden;
-}
-
-.cc img {
-    position: absolute;
-    inset: 0; /* top: 0; right: 0; bottom: 0; left: 0; */
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* fills the container without distortion */
-    z-index: -1; /* puts the image behind the content */
-}
-
-.img-container {
-    /*position: relative;*/
-    width: 100%;
-    height: 100%;
-}
-
-.img-container img {
-    width: 100%;
-    height: 100%;
-}
-
 .date-container {
     height: 24px;
     position: absolute;

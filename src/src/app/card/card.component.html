@@ -1,6 +1,6 @@
 @if (card.locked) {
     <div
-        class="aspect-4/3 flex flex-col items-center justify-between"
+        class="aspect-4/3 flex flex-col items-center justify-between overflow-hidden"
         [ngClass]="{locked: card.locked, unlocked: !card.locked}"
     >
         <div class="flex flex-row items-center">
@@ -19,7 +19,7 @@
         </div>
     </div>
 } @else {
-    <div class="aspect-4/3 cc">
+    <div class="aspect-4/3 overflow-hidden relative">
         <img [src]="card.image" alt="Day image" />
         <div class="date-container">{{ getDay(card) }} {{ getMonth(card) }}</div>
     </div>
