@@ -61,6 +61,15 @@ aws s3 cp s3://ale-trail-dev-state-20260822135440864900000002/dev.auto.tfvars tf
 aws s3 cp s3://ale-trail-dev-state-20260822135440864900000002/dev.backend.tfvars tfvars/
 ```
 
+### push-cards
+
+environment: AWS_PROFILE=aletrail
+inputs: DATA_BUCKET
+
+```shell
+aws s3 cp cards.json s3://${DATA_BUCKET}/cards.json
+```
+
 ### plan
 
 directory: stack
