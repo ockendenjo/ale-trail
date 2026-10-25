@@ -1,0 +1,8 @@
+{
+    "/api": {
+        "target": "https://dev.ale-trail.ockenden.io",
+        "secure": true,
+        "changeOrigin": true,
+        "logLevel": "info"
+    }
+}
