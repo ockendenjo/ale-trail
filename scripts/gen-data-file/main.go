@@ -39,8 +39,8 @@ func main() {
 	}
 }
 
-func getStashes(tm time.Time) []data.Stash {
-	a := make([]data.Stash, 0, 24)
+func getStashes(tm time.Time) []*data.Stash {
+	a := make([]*data.Stash, 0, 24)
 
 	releaseTimes := makeReleaseTimes()
 
@@ -50,7 +50,7 @@ func getStashes(tm time.Time) []data.Stash {
 			releaseType = "TIMED"
 		}
 
-		stash := data.Stash{
+		stash := &data.Stash{
 			Date:        tm.Format("2006-01-02"),
 			ReleaseType: releaseType,
 			ReleaseTime: releaseTimes[i],

@@ -7,6 +7,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.47.4
 	github.com/aws/aws-sdk-go-v2/config v1.33.10
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.5
+	github.com/aws/smithy-go v1.28.6
 	github.com/ockendenjo/handler v1.0.8
 	github.com/stretchr/testify v1.12.1
 )
@@ -29,7 +30,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.43.5 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.51.5 // indirect
 	github.com/aws/aws-xray-sdk-go/v2 v2.0.3 // indirect
-	github.com/aws/smithy-go v1.28.6 // indirect
 	github.com/klauspost/compress v1.17.6 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect

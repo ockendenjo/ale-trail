@@ -1,9 +1,11 @@
 package data
 
+import "time"
+
 type File struct {
-	Schema   *string `json:"$schema,omitempty"`
-	AdminKey string  `json:"adminKey"`
-	Stashes  []Stash `json:"stashes"`
+	Schema   *string  `json:"$schema,omitempty"`
+	AdminKey string   `json:"adminKey"`
+	Stashes  []*Stash `json:"stashes"`
 }
 
 type Stash struct {
@@ -14,6 +16,10 @@ type Stash struct {
 	ReleaseType string   `json:"releaseType"`
 	Stasher     *Stasher `json:"stasher,omitempty"`
 	StashKey    string   `json:"stashKey"`
+}
+
+func (s *Stash) IsToday() bool {
+	return s.Date == time.Now().Format(time.DateOnly)
 }
 
 type Stasher struct {
