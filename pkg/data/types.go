@@ -12,8 +12,13 @@ type Stash struct {
 	Image       string   `json:"image"`
 	ReleaseTime string   `json:"releaseTime"`
 	ReleaseType string   `json:"releaseType"`
-	Stasher     *string  `json:"stasher,omitempty"`
+	Stasher     *Stasher `json:"stasher,omitempty"`
 	StashKey    string   `json:"stashKey"`
+}
+
+type Stasher struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 type Details struct {
@@ -25,6 +30,6 @@ type Details struct {
 }
 
 type FileWithETag struct {
-	File *File  `json:"file"`
+	File *File   `json:"file"`
 	ETag *string `json:"etag"`
 }
