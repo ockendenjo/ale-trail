@@ -1,3 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+
+@layer components {
+    .input-txt {
+        @apply bg-gray-100 w-80 block border-2 text-sm focus:ring-2 rounded-xl shadow-2xs px-3 py-2 focus:border-blue-600;
+    }
+
+    .input-label {
+        @apply block mb-2 font-bold;
+    }
+
+    .input-button {
+        @apply rounded-xl bg-amber-900 px-3 py-2 block text-white cursor-pointer hover:opacity-75;
+    }
+}
