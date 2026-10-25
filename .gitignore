@@ -2,3 +2,5 @@
 stack/tfvars
 .terraform/
 cards.json
+data.json
+.golangci.json
