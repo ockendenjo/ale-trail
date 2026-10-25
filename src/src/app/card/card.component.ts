@@ -1,6 +1,5 @@
 import {Component, Input} from "@angular/core";
 import {Card} from "./card.type";
-import {NgClass} from "@angular/common";
 import {getDayStr, getMonthStr} from "../dateUtils";
 
 @Component({
