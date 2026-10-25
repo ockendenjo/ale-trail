@@ -102,6 +102,12 @@ directory: src
 npm run start
 ```
 
+### test
+
+```shell
+go test -json $(go list ./... | grep -v /e2e) | tparse
+```
+
 ### upload-cmd
 
 requires: build-cmd

@@ -64,7 +64,7 @@ func stashToCard(stash *data.Stash) card.Card {
 		image = &stash.Image
 	}
 	var releaseTime *string
-	if locked && stash.ReleaseType == "TIMED" && isToday(stash) {
+	if locked && stash.ReleaseType == "TIMED" && stash.IsToday() {
 		releaseTime = &stash.ReleaseTime
 	}
 
@@ -77,10 +77,6 @@ func stashToCard(stash *data.Stash) card.Card {
 		HostNeeded:  isHostNeeded(stash),
 	}
 	return c
-}
-
-func isToday(stash *data.Stash) bool {
-	return stash.Date == time.Now().Format("2006-01-02")
 }
 
 func isLocked(stash *data.Stash) bool {

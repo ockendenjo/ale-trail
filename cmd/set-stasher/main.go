@@ -66,6 +66,7 @@ func (h *lambdaHandler) handleRequest(ctx *handler.Context, date string, req *Se
 	if foundStash == nil {
 		return nil, apighandler.HttpError{StatusCode: http.StatusNotFound, Message: "no stash found", CWLogMsg: "stash not found"}
 	}
+	logger.Info("Found stash", "date", date)
 	if foundStash.Stasher != nil {
 		return nil, apighandler.HttpError{StatusCode: http.StatusConflict, Message: "stash has stasher already", CWLogMsg: "stash already had stasher"}
 	}
