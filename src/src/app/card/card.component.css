@@ -1,14 +1,10 @@
-.unlocked {
-    background: #c18f6c;
-}
-
 .locked {
     background: #ccc;
-    opacity: 0.5;
+    opacity: 0.75;
 }
 
 .date-container {
-    height: 24px;
+    height: 36px;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -16,5 +12,25 @@
     background: #444;
     opacity: 0.8;
     text-align: center;
+    line-height: 36px;
     color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.lock-container {
+    position: absolute;
+    top: 0;
+    height: 40px;
+    z-index: 1;
+    width: fit-content;
+}
+
+.central-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
