@@ -1,9 +1,9 @@
 package data
 
 type File struct {
-	Schema   *string `json:"$schema,omitempty"`
-	AdminKey string  `json:"adminKey"`
-	Stashes  []Stash `json:"stashes"`
+	Schema   *string  `json:"$schema,omitempty"`
+	AdminKey string   `json:"adminKey"`
+	Stashes  []*Stash `json:"stashes"`
 }
 
 type Stash struct {

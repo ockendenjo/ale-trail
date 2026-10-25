@@ -1,6 +1,7 @@
 package data
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 
@@ -9,6 +10,7 @@ import (
 
 type Client interface {
 	GetDataFile(ctx context.Context) (*FileWithETag, error)
+	PutFileWithEtag(ctx context.Context, fileWithETag *FileWithETag) error
 }
 
 func NewClient(s3Client *s3.Client, bucketName string) Client {
@@ -47,4 +49,19 @@ func (c *client) GetDataFile(ctx context.Context) (*FileWithETag, error) {
 		File: file,
 		ETag: res.ETag,
 	}, nil
+}
+
+func (c *client) PutFileWithEtag(ctx context.Context, fileWithETag *FileWithETag) error {
+	b, err := json.Marshal(fileWithETag.File)
+	if err != nil {
+		return err
+	}
+
+	_, err = c.s3Client.PutObject(ctx, &s3.PutObjectInput{
+		Bucket:  &c.bucketName,
+		Key:     new("data.json"),
+		IfMatch: fileWithETag.ETag,
+		Body:    bytes.NewReader(b),
+	})
+	return err
 }

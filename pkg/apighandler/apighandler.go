@@ -24,7 +24,7 @@ func GetHandler[T any](handleFn HttpHandlerFunc[T], statusCode int) handler.Hand
 				response := events.APIGatewayProxyResponse{StatusCode: httpError.StatusCode, Body: httpError.Message, Headers: map[string]string{
 					"Content-Type": "text/plain",
 				}}
-				logger.AddParam("log", httpError.Log).With("response", response).Error(err.Error())
+				logger.AddParam("log", httpError.CWLogMsg).With("response", response).Error(err.Error())
 				return response, nil
 			}
 			logger.Error(err.Error())
@@ -45,20 +45,20 @@ func GetHandler[T any](handleFn HttpHandlerFunc[T], statusCode int) handler.Hand
 
 type HttpError struct {
 	StatusCode int
-	Err        error
 	Message    string
-	Log        string
+	CWLogErr   error
+	CWLogMsg   string
 }
 
 func (h HttpError) Error() string {
-	if h.Err != nil {
-		return fmt.Sprintf("Returning HTTP error %d with message %s because %s", h.StatusCode, h.Message, h.Err.Error())
+	if h.CWLogErr != nil {
+		return fmt.Sprintf("Returning HTTP error %d with message %s because %s", h.StatusCode, h.Message, h.CWLogErr.Error())
 	}
 	return fmt.Sprintf("Returning HTTP error %d with message %s", h.StatusCode, h.Message)
 }
 
 func (h HttpError) Unwrap() error {
-	return h.Err
+	return h.CWLogErr
 }
 
 func GetEmailFromClaims(event events.APIGatewayProxyRequest) (string, error) {

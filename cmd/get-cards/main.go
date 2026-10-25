@@ -57,7 +57,7 @@ func getResponse(file *data.File) *CardResponse {
 	return &CardResponse{Cards: a}
 }
 
-func stashToCard(stash data.Stash) card.Card {
+func stashToCard(stash *data.Stash) card.Card {
 	locked := isLocked(stash)
 	var image *string
 	if !locked {
@@ -79,11 +79,11 @@ func stashToCard(stash data.Stash) card.Card {
 	return c
 }
 
-func isToday(stash data.Stash) bool {
+func isToday(stash *data.Stash) bool {
 	return stash.Date == time.Now().Format("2006-01-02")
 }
 
-func isLocked(stash data.Stash) bool {
+func isLocked(stash *data.Stash) bool {
 	s := stash.Date + "T" + stash.ReleaseTime + ":00Z"
 	tm, err := time.Parse("2006-01-02T15:04:05Z", s)
 	if err != nil {
@@ -92,7 +92,7 @@ func isLocked(stash data.Stash) bool {
 	return tm.After(time.Now())
 }
 
-func isHostNeeded(stash data.Stash) *bool {
+func isHostNeeded(stash *data.Stash) *bool {
 	if stash.Stasher != nil {
 		return nil
 	}
