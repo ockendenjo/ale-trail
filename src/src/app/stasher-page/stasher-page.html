@@ -43,16 +43,16 @@
                 <button class="input-button" type="submit">Submit</button>
             </div>
         }
-        @case("SAVING") {
+        @case ("SAVING") {
             <div>Submitting...</div>
         }
-        @case("SAVED") {
+        @case ("SAVED") {
             <div>Saved - we'll be in touch with a reminder email nearer the time</div>
         }
         @case ("CONFLICT") {
             <div>This stash already has a volunteer stasher.</div>
         }
-        @case("ERROR") {
+        @case ("ERROR") {
             <div>Something went wrong</div>
         }
     }
