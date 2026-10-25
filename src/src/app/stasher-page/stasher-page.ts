@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, Signal, signal} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 import {take} from "rxjs";
 import {getDayStr, getMonthStr} from "../dateUtils";
@@ -11,6 +11,7 @@ import {getDayStr, getMonthStr} from "../dateUtils";
 })
 export class StasherPage {
     private date: string = "";
+    public st: Signal<SaveState> = signal("READY");
 
     constructor(private readonly ar: ActivatedRoute) {
         ar.params.pipe(take(1)).subscribe((x) => {
@@ -36,3 +37,5 @@ export class StasherPage {
         return getDayStr(day) + " " + getMonthStr(month);
     }
 }
+
+type SaveState = "READY" | "SAVING" | "SAVED" | "CONFLICT" | "ERROR";
