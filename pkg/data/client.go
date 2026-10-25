@@ -38,7 +38,7 @@ func (c *client) GetDataFile(ctx context.Context) (*FileWithETag, error) {
 	}()
 
 	var file *File
-	err = json.NewDecoder(res.Body).Decode(file)
+	err = json.NewDecoder(res.Body).Decode(&file)
 	if err != nil {
 		return nil, err
 	}

@@ -3,3 +3,4 @@ stack/tfvars
 .terraform/
 data.json
 .golangci.json
+build/
