@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "adminKey": {
+      "type": "string"
+    },
+    "stashes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "releaseType": {
+            "type": "string",
+            "enum": ["RANDOM", "TIMED"]
+          },
+          "releaseTime": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "stashKey": {
+            "type": "string"
+          },
+          "stasher": {
+            "type": "string",
+            "description": "Stasher's email address"
+          },
+          "details": {
+            "type": "object",
+            "properties": {
+              "lat": {
+                "type": "number"
+              },
+              "lon": {
+                "type": "number"
+              },
+              "w3w": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "contents": {
+                "type": "string"
+              }
+            },
+            "required": ["lat", "lon", "w3w", "description", "contents"]
+          }
+        },
+        "required": ["date", "releaseType", "releaseTime", "stashKey", "image"],
+        "additionalProperties": false
+      }
+    }
+  }
+}
