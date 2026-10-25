@@ -11,6 +11,12 @@ environment: AWS_PROFILE=aletrail
 terraform apply -var-file=tfvars/dev.auto.tfvars -auto-approve
 ```
 
+### build-cmd
+
+```shell
+go run ./scripts/build-cmd --zip
+```
+
 ### format
 
 requires: format-tf, format-ng
@@ -94,4 +100,14 @@ directory: src
 
 ```shell
 npm run start
+```
+
+### upload-cmd
+
+requires: build-cmd
+environment: AWS_PROFILE=aletrail
+inputs: BINARY_BUCKET
+
+```shell
+go run ./scripts/upload-binaries
 ```

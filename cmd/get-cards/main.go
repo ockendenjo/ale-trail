@@ -32,13 +32,18 @@ type lambdaHandler struct {
 }
 
 func (h *lambdaHandler) handle(ctx *handler.Context, _ events.APIGatewayProxyRequest) (*CardResponse, error) {
+	logger := ctx.GetLogger()
 
 	res, err := h.Client.GetDataFile(ctx)
 	if err != nil {
 		return nil, err
 	}
+	logger.Info("Fetched data file from S3")
 
-	return getResponse(res.File), nil
+	cardRes := getResponse(res.File)
+	logger.Info("Mapped data to cards")
+
+	return cardRes, nil
 }
 
 func getResponse(file *data.File) *CardResponse {
