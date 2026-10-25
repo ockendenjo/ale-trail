@@ -1,5 +1,5 @@
 @if (card.locked) {
-    <div class="aspect-4/3 flex flex-col items-center overflow-hidden relative locked">
+    <div class="aspect-4/3 flex flex-col items-center overflow-hidden relative locked border-4 border-white">
         <div class="lock-container flex flex-row content-center items-center">
             <img src="lock.svg" alt="Lock" class="p-2 w-10 h-10" />
             @if (card.releaseType == "TIMED" && card.releaseTime) {
@@ -20,7 +20,9 @@
         <div class="date-container">{{ getDay(card) }} {{ getMonth(card) }}</div>
     </div>
 } @else {
-    <div class="aspect-4/3 overflow-hidden relative">
+    <div
+        class="aspect-4/3 overflow-hidden relative cursor-pointer hover:opacity-70 border-4 border-white hover:border-black"
+    >
         <img [src]="card.image" alt="Day image" />
         <div class="date-container">{{ getDay(card) }} {{ getMonth(card) }}</div>
     </div>
