@@ -11,7 +11,7 @@ interface RandomCard extends BaseCard {
 interface TimedCard extends BaseCard {
     locked: true;
     releaseType: "TIMED";
-    releaseTime: string;
+    releaseTime?: string;
 }
 
 interface UnlockedCard extends BaseCard {
