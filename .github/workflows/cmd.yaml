@@ -22,7 +22,9 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    environment: dev
+    environment:
+      name: dev
+      deployment: false
     permissions:
       id-token: write # OIDC authentication with AWS
       contents: read
