@@ -15,8 +15,8 @@ module "apig_get_cards" {
   source = "github.com/ockendenjo/tfmods//apig-endpoint"
 
   rest_api    = aws_api_gateway_rest_api.main
-  http_method = "POST"
-  path        = "deleteAccount"
+  http_method = "GET"
+  path        = "cards"
   lambda      = module.lambda_get_cards
   parent_id   = aws_api_gateway_resource.api.id
 }
