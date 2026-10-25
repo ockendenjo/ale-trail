@@ -8,6 +8,7 @@ module "lambda_get_cards" {
   s3_object_key            = local.manifest["get-cards"]
 
   environment = {
+    DATA_BUCKET = aws_s3_bucket.data.id
   }
 }
 
@@ -19,4 +20,10 @@ module "apig_get_cards" {
   path        = "cards"
   lambda      = module.lambda_get_cards
   parent_id   = aws_api_gateway_resource.api.id
+}
+
+module "iam_s3_get_cards" {
+  source     = "github.com/ockendenjo/tfmods//iam-s3"
+  bucket_arn = aws_s3_bucket.data.arn
+  role_id    = module.lambda_get_cards.role_id
 }
