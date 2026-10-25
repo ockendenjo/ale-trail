@@ -26,8 +26,17 @@
             "type": "string"
           },
           "stasher": {
-            "type": "string",
-            "description": "Stasher's email address"
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": ["name", "email"],
+            "additionalProperties": false
           },
           "details": {
             "type": "object",
