@@ -49,6 +49,14 @@ jobs:
         env:
           INPUTS_BUCKET: ${{ secrets.STATE_BUCKET }}
 
+      - name: Update manifest file
+        shell: bash
+        working-directory: stack
+        env:
+          MANIFEST_FILE: ${{ inputs.manifest_file }}
+        run: |
+          sed -i "s#manifest_file[[:space:]]*=[[:space:]]*\"default.json\"#manifest_file = \"$MANIFEST_FILE\"#" "tfvars/dev.auto.tfvars"
+
       - name: Terraform plan
         working-directory: stack
         run: |
