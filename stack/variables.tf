@@ -8,6 +8,11 @@ variable "aws_region" {
   type        = string
 }
 
+variable "binary_bucket" {
+  description = "S3 bucket with compiled lambda binaries"
+  type        = string
+}
+
 variable "cloudfront" {
   type = object({
     domain          = string
@@ -23,6 +28,15 @@ variable "env" {
     condition     = contains(["dev", "pro"], var.env)
     error_message = "Environment must be either 'dev' or 'pro'."
   }
+}
+
+variable "manifest_file" {
+  type    = string
+  default = "default.json"
+}
+
+variable "permissions_boundary_arn" {
+  type = string
 }
 
 variable "zone_domain" {
