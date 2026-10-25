@@ -79,6 +79,15 @@ environment: AWS_PROFILE=aletrail
 terraform plan -var-file=tfvars/dev.auto.tfvars
 ```
 
+### sast
+
+```shell
+go fix --diff ./...
+wget -O .golangci.json https://raw.githubusercontent.com/ockendenjo/actions/refs/heads/main/.golangci.json
+golangci-lint run
+govulncheck ./...
+```
+
 ### serve
 
 directory: src

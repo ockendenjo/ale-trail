@@ -93,7 +93,7 @@ func makeReleaseTimes() []string {
 }
 
 func getRandomReleaseTime() (int, int) {
-	h := rand.IntN(18) + 3
-	m := rand.IntN(60)
+	h := rand.IntN(18) + 3 // #nosec G404 - secure rand not needed
+	m := rand.IntN(60)     // #nosec G404 - secure rand not needed
 	return h, m
 }
