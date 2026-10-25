@@ -10,6 +10,23 @@ permissions:
   contents: read
 
 jobs:
+  test:
+    name: Go
+    uses: $/.github/workflows/go-test.yaml
+
+  cmd:
+    name: Go
+    permissions:
+      id-token: write # OIDC authentication with AWS
+      contents: read
+    uses: $/.github/workflows/cmd.yaml
+    with:
+      upload: true
+      manifest_file: ${{ format('pr{0}.json', github.event.pull_request.number) }}
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+      BINARY_BUCKET: ${{ secrets.BINARY_BUCKET }}
+
   ui:
     name: UI
     uses: $/.github/workflows/ui.yaml
@@ -34,10 +51,13 @@ jobs:
 
   tf-plan:
     name: Terraform
+    needs: [cmd]
     permissions:
       id-token: write # OIDC authentication with AWS
       contents: read
     uses: $/.github/workflows/tf-plan.yaml
+    with:
+      manifest_file: ${{ format('pr{0}.json', github.event.pull_request.number) }}
     secrets:
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
       STATE_BUCKET: ${{ secrets.STATE_BUCKET }}

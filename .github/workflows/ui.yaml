@@ -23,7 +23,9 @@ jobs:
   build:
     name: Build
     timeout-minutes: 2
-    environment: ${{ inputs.environment }}
+    environment:
+      name: ${{ inputs.environment }}
+      deployment: ${{ inputs.upload_ui }}
     runs-on: ubuntu-latest
     permissions:
       id-token: write # OIDC authentication with AWS
