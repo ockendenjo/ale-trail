@@ -1,21 +1,33 @@
-import {Component, Signal, signal} from "@angular/core";
+import {Component, signal} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 import {take} from "rxjs";
 import {getDayStr, getMonthStr} from "../dateUtils";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NgClass} from "@angular/common";
 
 @Component({
-    imports: [],
+    imports: [ReactiveFormsModule, NgClass],
     selector: "app-stasher-page",
     styleUrl: "./stasher-page.css",
     templateUrl: "./stasher-page.html",
 })
 export class StasherPage {
     private date: string = "";
-    public st: Signal<SaveState> = signal("READY");
+    public st = signal<SaveState>("READY");
 
-    constructor(private readonly ar: ActivatedRoute) {
+    public form: FormGroup;
+
+    constructor(
+        private readonly ar: ActivatedRoute,
+        private readonly formBuilder: FormBuilder,
+    ) {
         ar.params.pipe(take(1)).subscribe((x) => {
             this.date = x["date"];
+        });
+
+        this.form = this.formBuilder.group({
+            name: ["", Validators.required],
+            email: ["", [Validators.required, Validators.email]],
         });
     }
 
@@ -35,6 +47,28 @@ export class StasherPage {
         const day = parts[2];
         const month = parts[1];
         return getDayStr(day) + " " + getMonthStr(month);
+    }
+
+    public submit(): void {
+        const value = this.form.value;
+
+        this.st.set("SAVING");
+        fetch(`/api/stashes/${this.date}/stasher`, {method: "POST", body: JSON.stringify(value)})
+            .then((r) => {
+                switch (r.status) {
+                    case 204:
+                        this.st.set("SAVED");
+                        break;
+                    case 409:
+                        this.st.set("CONFLICT");
+                        break;
+                    default:
+                        this.st.set("ERROR");
+                }
+            })
+            .catch(() => {
+                this.st.set("ERROR");
+            });
     }
 }
 

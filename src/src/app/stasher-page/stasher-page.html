@@ -29,19 +29,42 @@
 
             <h2 class="text-2xl font-bold mt-2 mb-4">Sign Up</h2>
 
-            <div>
-                <label class="input-label" for="name">Name</label>
-                <input type="text" id="name" autocomplete="name" class="input-txt" placeholder="Name" required />
-            </div>
+            <form [formGroup]="form" (submit)="submit()">
+                <div>
+                    <label class="input-label" for="name">Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        autocomplete="name"
+                        class="input-txt"
+                        placeholder="Name"
+                        formControlName="name"
+                    />
+                </div>
 
-            <div>
-                <label class="input-label" for="email">Email</label>
-                <input type="text" id="email" autocomplete="email" class="input-txt" placeholder="Email" required />
-            </div>
+                <div>
+                    <label class="input-label" for="email">Email</label>
+                    <input
+                        type="text"
+                        id="email"
+                        autocomplete="email"
+                        class="input-txt"
+                        placeholder="Email"
+                        formControlName="email"
+                    />
+                </div>
 
-            <div class="mt-4">
-                <button class="input-button" type="submit">Submit</button>
-            </div>
+                <div class="mt-4">
+                    <button
+                        class="input-button"
+                        type="submit"
+                        [disabled]="form.invalid"
+                        [ngClass]="{'cursor-not-allowed': form.invalid}"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </form>
         }
         @case ("SAVING") {
             <div>Submitting...</div>
