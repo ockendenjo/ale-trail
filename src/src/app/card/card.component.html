@@ -1,24 +1,43 @@
 @if (card.locked) {
-    <div class="aspect-4/3 flex flex-col items-center overflow-hidden relative locked border-4 border-white">
-        <div class="lock-container flex flex-row content-center items-center">
-            <img src="lock.svg" alt="Lock" class="p-2 w-10 h-10" />
-            @if (card.releaseType == "TIMED" && card.releaseTime) {
-                Revealed at {{ card.releaseTime }}
-            }
-        </div>
+    @if (card.hostNeeded) {
+        <div
+            class="aspect-4/3 flex flex-col items-center overflow-hidden relative locked border-4 border-white cursor-pointer hover:opacity-70 border-4 border-white hover:border-black"
+            [routerLink]="getLink(card)"
+        >
+            <div class="lock-container flex flex-row content-center items-center">
+                <img src="lock.svg" alt="Lock" class="p-2 w-10 h-10" />
+                @if (card.releaseType == "TIMED" && card.releaseTime) {
+                    Revealed at {{ card.releaseTime }}
+                }
+            </div>
 
-        <div class="central-container flex flex-col justify-center items-center">
-            @if (card.hostNeeded) {
+            <div class="central-container flex flex-col justify-center items-center">
                 <div>Stasher needed</div>
-            } @else {
+            </div>
+
+            <div class="date-container">{{ getDay(card) }} {{ getMonth(card) }}</div>
+        </div>
+    } @else {
+        <div
+            class="aspect-4/3 flex flex-col items-center overflow-hidden relative locked border-4 border-white"
+            [routerLink]="getLink(card)"
+        >
+            <div class="lock-container flex flex-row content-center items-center">
+                <img src="lock.svg" alt="Lock" class="p-2 w-10 h-10" />
+                @if (card.releaseType == "TIMED" && card.releaseTime) {
+                    Revealed at {{ card.releaseTime }}
+                }
+            </div>
+
+            <div class="central-container flex flex-col justify-center items-center">
                 <div class="text-8xl">
                     {{ getDay(card) }}
                 </div>
-            }
-        </div>
+            </div>
 
-        <div class="date-container">{{ getDay(card) }} {{ getMonth(card) }}</div>
-    </div>
+            <div class="date-container">{{ getDay(card) }} {{ getMonth(card) }}</div>
+        </div>
+    }
 } @else {
     <div
         class="aspect-4/3 overflow-hidden relative cursor-pointer hover:opacity-70 border-4 border-white hover:border-black"
