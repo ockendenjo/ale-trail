@@ -1,8 +1,9 @@
-import {Component} from "@angular/core";
+import {Component, OnInit, signal} from "@angular/core";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {take} from "rxjs";
 import {NgClass} from "@angular/common";
+import {PageState} from "../page-state";
 
 @Component({
     imports: [FormsModule, ReactiveFormsModule, NgClass],
@@ -10,9 +11,10 @@ import {NgClass} from "@angular/common";
     styleUrl: "./location-page.css",
     templateUrl: "./location-page.html",
 })
-export class LocationPage {
+export class LocationPage implements OnInit {
     public date: string = "";
     private key: string = "";
+    public pg = signal<LocationPageState>({state: "LOADING"});
 
     public form: FormGroup;
 
@@ -37,5 +39,31 @@ export class LocationPage {
         });
     }
 
+    ngOnInit() {
+        fetch(`/api/stashes/${this.date}/location?key=${this.key}`, {method: "GET"})
+            .then((r) => r.json())
+            .then((j: StashDetails) => {
+                this.form.setValue(j);
+                this.pg.set({state: "LOADED", data: undefined});
+            })
+            .catch((e) => {
+                this.pg.set({state: "ERROR", error: e});
+            });
+    }
+
     public submit(): void {}
+}
+
+type LocationPageState = PageState<void> | StateSaving;
+
+interface StateSaving {
+    state: "SAVING";
+}
+
+interface StashDetails {
+    lat: number;
+    lon: number;
+    w3w: string;
+    description: string;
+    contents: string;
 }
