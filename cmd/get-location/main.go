@@ -28,8 +28,6 @@ type LambdaHandler struct {
 }
 
 func (h *LambdaHandler) handle(ctx *handler.Context, event events.APIGatewayProxyRequest) (*data.Details, error) {
-	logger := ctx.GetLogger()
-
 	date := event.PathParameters["date"]
 	if date == "" {
 		return nil, apighandler.HttpError{StatusCode: http.StatusBadRequest, Message: "invalid request", CWLogMsg: "date not set"}
@@ -39,6 +37,23 @@ func (h *LambdaHandler) handle(ctx *handler.Context, event events.APIGatewayProx
 		return nil, apighandler.HttpError{StatusCode: http.StatusBadRequest, Message: "invalid request", CWLogMsg: "key not set"}
 	}
 
+	foundStash, err := h.getStashForDate(ctx, date, key)
+	if err != nil {
+		return nil, err
+	}
+
+	var details *data.Details
+	if foundStash.Details != nil {
+		details = foundStash.Details
+	} else {
+		details = &data.Details{}
+	}
+
+	return details, nil
+}
+
+func (h *LambdaHandler) getStashForDate(ctx *handler.Context, date, key string) (*data.Stash, error) {
+	logger := ctx.GetLogger()
 	fileWithEtag, err := h.Client.GetDataFile(ctx)
 	if err != nil {
 		return nil, apighandler.HttpError{StatusCode: http.StatusInternalServerError, CWLogErr: err}
@@ -67,12 +82,5 @@ func (h *LambdaHandler) handle(ctx *handler.Context, event events.APIGatewayProx
 		return nil, apighandler.HttpError{StatusCode: http.StatusUnauthorized, Message: "incorrect key", CWLogMsg: "incorrect stash key"}
 	}
 
-	var details *data.Details
-	if foundStash.Details != nil {
-		details = foundStash.Details
-	} else {
-		details = &data.Details{}
-	}
-
-	return details, nil
+	return foundStash, nil
 }
