@@ -19,7 +19,7 @@ module "apig_put_location" {
   http_method = "GET"
   path        = "location"
   lambda      = module.lambda_put_location
-  parent_id   = aws_api_gateway_resource.date.id
+  resource_id = aws_api_gateway_resource.location.id
 }
 
 module "iam_s3_put_location" {
