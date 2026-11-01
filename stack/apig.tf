@@ -20,6 +20,7 @@ resource "aws_api_gateway_deployment" "main" {
 
       module.apig_get_cards,
       module.apig_set_stasher,
+      module.apig_get_location,
     ]))
   }
 
