@@ -41,3 +41,21 @@ resource "aws_api_gateway_resource" "api" {
   path_part   = "api"
   rest_api_id = aws_api_gateway_rest_api.main.id
 }
+
+resource "aws_api_gateway_resource" "stashes" {
+  parent_id   = aws_api_gateway_resource.api.id
+  path_part   = "stashes"
+  rest_api_id = aws_api_gateway_rest_api.main.id
+}
+
+resource "aws_api_gateway_resource" "date" {
+  parent_id   = aws_api_gateway_resource.stashes.id
+  path_part   = "{date}"
+  rest_api_id = aws_api_gateway_rest_api.main.id
+}
+
+resource "aws_api_gateway_resource" "location" {
+  parent_id   = aws_api_gateway_resource.date.id
+  path_part   = "location"
+  rest_api_id = aws_api_gateway_rest_api.main.id
+}
