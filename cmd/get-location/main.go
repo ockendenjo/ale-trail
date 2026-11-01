@@ -28,10 +28,13 @@ type LambdaHandler struct {
 }
 
 func (h *LambdaHandler) handle(ctx *handler.Context, event events.APIGatewayProxyRequest) (*data.Details, error) {
+	logger := ctx.GetLogger()
+
 	date := event.PathParameters["date"]
 	if date == "" {
 		return nil, apighandler.HttpError{StatusCode: http.StatusBadRequest, Message: "invalid request", CWLogMsg: "date not set"}
 	}
+	logger.AddParam("date", date)
 	key := event.QueryStringParameters["key"]
 	if key == "" {
 		return nil, apighandler.HttpError{StatusCode: http.StatusBadRequest, Message: "invalid request", CWLogMsg: "key not set"}
@@ -62,7 +65,7 @@ func (h *LambdaHandler) getStashForDate(ctx *handler.Context, date, key string) 
 
 	var foundStash *data.Stash
 	for _, stash := range fileWithEtag.File.Stashes {
-		if stash.Date == "date" {
+		if stash.Date == date {
 			foundStash = stash
 			break
 		}
@@ -71,7 +74,7 @@ func (h *LambdaHandler) getStashForDate(ctx *handler.Context, date, key string) 
 	if foundStash == nil {
 		return nil, apighandler.HttpError{StatusCode: http.StatusNotFound, Message: "no stash found", CWLogMsg: "stash not found"}
 	}
-	logger.Info("Found stash", "date", date)
+	logger.Info("Found stash")
 
 	switch key {
 	case foundStash.StashKey:
