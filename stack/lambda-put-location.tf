@@ -1,0 +1,44 @@
+module "lambda_put_location" {
+  source                   = "github.com/ockendenjo/tfmods//lambda"
+  project_name             = "ale-trail"
+  aws_env                  = var.env
+  name                     = "put-location"
+  permissions_boundary_arn = var.permissions_boundary_arn
+  s3_bucket                = var.binary_bucket
+  s3_object_key            = local.manifest["put-location"]
+
+  environment = {
+    DATA_BUCKET = aws_s3_bucket.data.id
+  }
+}
+
+resource "aws_api_gateway_method" "put_location" {
+  rest_api_id   = aws_api_gateway_rest_api.main.id
+  resource_id   = aws_api_gateway_resource.location.id
+  http_method   = "PUT"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "put_location" {
+  rest_api_id             = aws_api_gateway_rest_api.main.id
+  resource_id             = aws_api_gateway_resource.location.id
+  http_method             = aws_api_gateway_method.put_location.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = "arn:aws:apigateway:${data.aws_region.current.region}:lambda:path/2015-03-31/functions/${module.lambda_put_location.arn}/invocations"
+}
+
+resource "aws_lambda_permission" "put_location" {
+  statement_id  = "AllowAPIGInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = module.lambda_put_location.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.main.execution_arn}/*/*"
+}
+
+module "iam_s3_put_location" {
+  source      = "github.com/ockendenjo/tfmods//iam-s3"
+  bucket_arn  = aws_s3_bucket.data.arn
+  role_id     = module.lambda_put_location.role_id
+  allow_write = true
+}
