@@ -58,11 +58,12 @@ func (h *LambdaHandler) handle(ctx *handler.Context, event events.APIGatewayProx
 	}
 	logger.Info("Found stash", "date", date)
 
-	if key == foundStash.StashKey {
-		logger.Info("Authenticated using stash key")
-	} else if key == fileWithEtag.File.AdminKey {
-		logger.Info("Authenticated using admin key")
-	} else {
+	switch key {
+	case foundStash.StashKey:
+		logger.Info("Authorized using stash key")
+	case fileWithEtag.File.AdminKey:
+		logger.Info("Authorized using admin key")
+	default:
 		return nil, apighandler.HttpError{StatusCode: http.StatusUnauthorized, Message: "incorrect key", CWLogMsg: "incorrect stash key"}
 	}
 
