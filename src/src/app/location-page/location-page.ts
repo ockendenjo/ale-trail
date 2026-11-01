@@ -51,13 +51,33 @@ export class LocationPage implements OnInit {
             });
     }
 
-    public submit(): void {}
+    public submit(): void {
+        this.pg.set({state: "SAVING"});
+        fetch(`/api/stashes/${this.date}/location?key=${this.key}`, {
+            method: "PUT",
+            body: JSON.stringify(this.form.value),
+        })
+            .then((r) => {
+                if (r.status === 204) {
+                    this.pg.set({state: "SAVED"});
+                } else {
+                    this.pg.set({state: "ERROR", error: new Error("error saving")});
+                }
+            })
+            .catch((e) => {
+                this.pg.set({state: "ERROR", error: e});
+            });
+    }
 }
 
-type LocationPageState = PageState<void> | StateSaving;
+type LocationPageState = PageState<void> | StateSaving | StateSaved;
 
 interface StateSaving {
     state: "SAVING";
+}
+
+interface StateSaved {
+    state: "SAVED";
 }
 
 interface StashDetails {
