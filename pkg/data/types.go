@@ -27,14 +27,6 @@ type Stasher struct {
 	Email string `json:"email"`
 }
 
-type Details struct {
-	Contents    string  `json:"contents"`
-	Description string  `json:"description"`
-	Lat         float64 `json:"lat"`
-	Lon         float64 `json:"lon"`
-	W3W         string  `json:"w3w"`
-}
-
 type FileWithETag struct {
 	File *File   `json:"file"`
 	ETag *string `json:"etag"`
