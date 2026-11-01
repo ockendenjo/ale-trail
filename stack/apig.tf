@@ -20,8 +20,11 @@ resource "aws_api_gateway_deployment" "main" {
 
       module.apig_get_cards,
       module.apig_set_stasher,
-      module.apig_get_location,
-      module.apig_put_location,
+      aws_api_gateway_resource.location,
+      aws_api_gateway_method.get_location,
+      aws_api_gateway_method.put_location,
+      aws_api_gateway_integration.get_location,
+      aws_api_gateway_integration.put_location,
     ]))
   }
 
