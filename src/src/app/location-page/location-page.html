@@ -1,0 +1,77 @@
+<div class="m-4">
+    <h1 class="text-4xl font-bold mb-4">Set stash details</h1>
+
+    <form [formGroup]="form" (submit)="submit()">
+        <div>
+            <label class="input-label" for="w3w">W3W</label>
+            <input type="text" id="w3w" class="input-txt" placeholder="W3W" formControlName="w3w" />
+        </div>
+
+        <p class="mt-2 mb-2">
+            Use
+            <a
+                href="https://www.geocachingtoolbox.com/index.php?lang=en&page=w3w"
+                target="_blank"
+                rel="noopener"
+                class="text-blue-600"
+                >geocachingtoolbox.com</a
+            >
+            to convert W3W to coordinates.
+        </p>
+
+        <div>
+            <label class="input-label" for="lat">Latitude</label>
+            <input
+                type="number"
+                step="0.00001"
+                id="lat"
+                class="input-txt"
+                placeholder="Latitude"
+                formControlName="lat"
+            />
+        </div>
+
+        <div>
+            <label class="input-label" for="lon">Longitude</label>
+            <input
+                type="number"
+                step="0.00001"
+                id="lon"
+                class="input-txt"
+                placeholder="Longitude"
+                formControlName="lon"
+            />
+        </div>
+
+        <div>
+            <label class="input-label" for="description">Description of location</label>
+            <textarea
+                id="description"
+                class="input-txt"
+                placeholder="Location description (e.g. base of big tree)"
+                formControlName="description"
+            ></textarea>
+        </div>
+
+        <div>
+            <label class="input-label" for="contents">Contents (optional)</label>
+            <textarea
+                id="contents"
+                class="input-txt"
+                placeholder="What's in the stash? (e.g. 2 beers)"
+                formControlName="contents"
+            ></textarea>
+        </div>
+
+        <div class="mt-4">
+            <button
+                class="input-button"
+                type="submit"
+                [disabled]="form.invalid"
+                [ngClass]="{'cursor-not-allowed': form.invalid}"
+            >
+                Submit
+            </button>
+        </div>
+    </form>
+</div>
