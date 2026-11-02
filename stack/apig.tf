@@ -25,6 +25,8 @@ resource "aws_api_gateway_deployment" "main" {
       aws_api_gateway_method.put_location,
       aws_api_gateway_integration.get_location,
       aws_api_gateway_integration.put_location,
+      aws_api_gateway_method.get_stash,
+      aws_api_gateway_integration.get_stash,
     ]))
   }
 
