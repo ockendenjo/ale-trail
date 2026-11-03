@@ -18,7 +18,6 @@ resource "aws_api_gateway_deployment" "main" {
       aws_api_gateway_resource.stashes,
       aws_api_gateway_resource.date,
 
-      module.apig_get_cards,
       module.apig_set_stasher,
       aws_api_gateway_resource.location,
       aws_api_gateway_method.get_location,
