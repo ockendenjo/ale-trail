@@ -32,6 +32,7 @@ interface FullUnlockedStash extends BaseStash {
     image: string;
     lat: number;
     lon: number;
+    w3w: string;
     description: string;
     contents: string;
 }
