@@ -1,7 +1,8 @@
 import {Component, OnInit, signal} from "@angular/core";
 import {CardComponent} from "../card/card.component";
-import {Card} from "../card/card.type";
 import {PageState} from "../page-state";
+import {StashService} from "../stash-service/stash.service";
+import {ShortStash} from "../stash-service/types";
 
 @Component({
     imports: [CardComponent],
@@ -10,20 +11,18 @@ import {PageState} from "../page-state";
     templateUrl: "./home-page.html",
 })
 export class HomePage implements OnInit {
-    public st = signal<PageState<Card[]>>({state: "LOADING"});
+    public st = signal<PageState<ShortStash[]>>({state: "LOADING"});
+
+    constructor(private readonly stashSvc: StashService) {}
 
     ngOnInit() {
-        fetch("/api/cards")
-            .then((res) => res.json())
-            .then((res: CardsResponse) => {
-                this.st.set({state: "LOADED", data: res.cards});
+        this.stashSvc
+            .listStashes()
+            .then((res) => {
+                this.st.set({state: "LOADED", data: res});
             })
-            .catch((error) => {
-                this.st.set({state: "ERROR", error: error});
+            .catch((err) => {
+                this.st.set({state: "ERROR", error: err});
             });
     }
-}
-
-interface CardsResponse {
-    cards: Card[];
 }
