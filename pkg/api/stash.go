@@ -24,6 +24,10 @@ type Stash struct {
 	W3W         *string  `json:"w3w,omitempty"`
 }
 
+type Stashes struct {
+	Stashes []*Stash `json:"stashes"`
+}
+
 func GetStash(data *data.Stash, fullMode bool) *Stash {
 
 	locked := data.IsLocked(time.Now())
