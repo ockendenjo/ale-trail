@@ -1,0 +1,26 @@
+<div class="m-4">
+    <h1 class="text-4xl font-bold mb-4">{{ date | date: "dd MMM" }}</h1>
+
+    @let s = st();
+    @switch (s.state) {
+        @case ("LOADING") {
+            <div>Loading...</div>
+        }
+        @case ("LOADED") {
+            @let d = s.data;
+
+            @if (d.locked) {
+                <p class="mt-1 mb-1">Stash location has not been released</p>
+                @if (d.hostNeeded) {
+                    <p class="mt-1 mb-1">
+                        This stash needs a host - sign up
+                        <a routerLink="stasher" class="text-blue-500 underline font-bold">here</a>.
+                    </p>
+                }
+            } @else {
+                <p>{{ d.description }}</p>
+                <p>{{ d.contents }}</p>
+            }
+        }
+    }
+</div>
