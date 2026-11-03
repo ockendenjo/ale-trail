@@ -1,0 +1,28 @@
+interface BaseStash {
+    date: string;
+    locked: boolean;
+}
+
+interface RandomTimedStash extends BaseStash {
+    locked: true;
+    releaseType: "RANDOM";
+    hostNeeded?: true;
+}
+
+interface TimedStash extends BaseStash {
+    locked: true;
+    releaseType: "TIMED";
+    releaseTime?: string;
+    hostNeeded?: true;
+}
+
+interface UnlockedStash extends BaseStash {
+    locked: false;
+    image: string;
+}
+
+export type ShortStash = UnlockedStash | RandomTimedStash | TimedStash;
+
+export interface StashList {
+    stashes: ShortStash[];
+}
