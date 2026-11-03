@@ -43,6 +43,8 @@ func GetStash(data *data.Stash, fullMode bool) *Stash {
 		if data.ReleaseType == "TIMED" && data.IsToday() {
 			stash.ReleaseTime = &data.ReleaseTime
 		}
+	} else {
+		stash.Image = &data.Image
 	}
 
 	if !fullMode {
@@ -56,7 +58,6 @@ func GetStash(data *data.Stash, fullMode bool) *Stash {
 		stash.Lat = &details.Lat
 		stash.Description = &details.Description
 		stash.Contents = &details.Contents
-		stash.Image = &data.Image
 	}
 
 	return stash
