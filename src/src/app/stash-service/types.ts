@@ -26,3 +26,14 @@ export type ShortStash = UnlockedStash | RandomTimedStash | TimedStash;
 export interface StashList {
     stashes: ShortStash[];
 }
+
+interface FullUnlockedStash extends BaseStash {
+    locked: false;
+    image: string;
+    lat: number;
+    lon: number;
+    description: string;
+    contents: string;
+}
+
+export type FullStash = FullUnlockedStash | RandomTimedStash | TimedStash;
