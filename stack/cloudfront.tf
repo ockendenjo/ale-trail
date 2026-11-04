@@ -34,6 +34,18 @@ resource "aws_cloudfront_response_headers_policy" "index_html" {
   }
 }
 
+resource "aws_cloudfront_response_headers_policy" "no_cache" {
+  name = "bogale-no-cache-${var.env}"
+
+  custom_headers_config {
+    items {
+      header   = "Cache-Control"
+      value    = "no-cache, max-age=0, must-revalidate"
+      override = true
+    }
+  }
+}
+
 resource "aws_cloudfront_distribution" "ale_trail" {
   comment             = "ale trail (${var.env})"
   enabled             = true
@@ -80,6 +92,28 @@ resource "aws_cloudfront_distribution" "ale_trail" {
     compress                   = true
     cache_policy_id            = data.aws_cloudfront_cache_policy.caching_disabled.id
     response_headers_policy_id = aws_cloudfront_response_headers_policy.index_html.id
+    allowed_methods            = ["GET", "HEAD"]
+    cached_methods             = ["GET", "HEAD"]
+  }
+
+  ordered_cache_behavior {
+    path_pattern               = "ngsw.json"
+    target_origin_id           = "s3-static"
+    viewer_protocol_policy     = "redirect-to-https"
+    compress                   = true
+    cache_policy_id            = data.aws_cloudfront_cache_policy.caching_disabled.id
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.no_cache.id
+    allowed_methods            = ["GET", "HEAD"]
+    cached_methods             = ["GET", "HEAD"]
+  }
+
+  ordered_cache_behavior {
+    path_pattern               = "ngsw-worker.js"
+    target_origin_id           = "s3-static-ew1"
+    viewer_protocol_policy     = "redirect-to-https"
+    compress                   = true
+    cache_policy_id            = data.aws_cloudfront_cache_policy.caching_disabled.id
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.no_cache.id
     allowed_methods            = ["GET", "HEAD"]
     cached_methods             = ["GET", "HEAD"]
   }

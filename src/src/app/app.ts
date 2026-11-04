@@ -1,5 +1,6 @@
-import {Component, signal} from "@angular/core";
+import {Component, OnDestroy, OnInit, signal} from "@angular/core";
 import {RouterLink, RouterOutlet} from "@angular/router";
+import {UpdateService} from "./update.service";
 
 @Component({
     imports: [RouterOutlet, RouterLink],
@@ -7,6 +8,25 @@ import {RouterLink, RouterOutlet} from "@angular/router";
     styleUrl: "./app.css",
     templateUrl: "./app.html",
 })
-export class App {
+export class App implements OnInit, OnDestroy {
+    private readonly _visibilityListener: () => void;
     protected readonly title = signal("ale-trail");
+
+    constructor(private readonly updateSvc: UpdateService) {
+        this._visibilityListener = this.visibilityListener.bind(this);
+    }
+
+    private visibilityListener(): void {
+        this.updateSvc.checkForUpdate().catch(console.error);
+    }
+
+    ngOnInit() {
+        document.addEventListener("visibilitychange", this._visibilityListener);
+        window.addEventListener("focus", this._visibilityListener);
+    }
+
+    ngOnDestroy() {
+        document.removeEventListener("visibilitychange", this._visibilityListener);
+        window.removeEventListener("focus", this._visibilityListener);
+    }
 }
