@@ -109,7 +109,7 @@ resource "aws_cloudfront_distribution" "ale_trail" {
 
   ordered_cache_behavior {
     path_pattern               = "ngsw-worker.js"
-    target_origin_id           = "s3-static-ew1"
+    target_origin_id           = "s3-static"
     viewer_protocol_policy     = "redirect-to-https"
     compress                   = true
     cache_policy_id            = data.aws_cloudfront_cache_policy.caching_disabled.id
