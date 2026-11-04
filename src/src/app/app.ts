@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit, signal} from "@angular/core";
 import {RouterLink, RouterOutlet} from "@angular/router";
 import {UpdateService} from "./update.service";
+import {environment} from "../environments/environment.dev";
 
 @Component({
     imports: [RouterOutlet, RouterLink],
@@ -9,6 +10,8 @@ import {UpdateService} from "./update.service";
     templateUrl: "./app.html",
 })
 export class App implements OnInit, OnDestroy {
+    protected readonly environment = environment;
+
     private readonly _visibilityListener: () => void;
     protected readonly title = signal("ale-trail");
 
