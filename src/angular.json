@@ -27,7 +27,7 @@
                         "styles": ["src/styles.css", "node_modules/ol/ol.css"]
                     },
                     "configurations": {
-                        "production": {
+                        "aws-dev": {
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -43,13 +43,35 @@
                             "serviceWorker": "ngsw-config.json",
                             "outputHashing": "all"
                         },
+                        "aws-pro": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kB",
+                                    "maximumError": "1MB"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "4kB",
+                                    "maximumError": "8kB"
+                                }
+                            ],
+                            "serviceWorker": "ngsw-config.json",
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.dev.ts",
+                                    "with": "src/environments/environment.pro.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
                         "development": {
                             "optimization": false,
                             "extractLicenses": false,
                             "sourceMap": true
                         }
                     },
-                    "defaultConfiguration": "production"
+                    "defaultConfiguration": "development"
                 },
                 "serve": {
                     "builder": "@angular/build:dev-server",
