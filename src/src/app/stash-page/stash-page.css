@@ -1,0 +1,30 @@
+.link {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    height: 32px;
+    max-height: 32px;
+    display: flex;
+    align-items: center;
+}
+
+.w3w {
+    margin-left: -4px;
+}
+
+.gmaps {
+    img {
+        margin-right: 4px;
+    }
+}
+
+.apple {
+    margin-left: 2px;
+
+    img {
+        margin-right: 6px;
+    }
+}
+
+.noimg {
+    margin-left: 28px;
+}

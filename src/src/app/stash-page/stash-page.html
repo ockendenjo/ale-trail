@@ -27,6 +27,33 @@
 
                 <p class="mt-1 mb-1">{{ d.description }}</p>
                 <p class="mt-1 mb-1">{{ d.contents }}</p>
+
+                <h3 class="text-2xl font-bold mb-4 mt-2">Links</h3>
+
+                <div class="link w3w">
+                    <img src="w3w.png" height="32" width="32" alt="w3w" /><a [href]="getW3WAppUrl(d)" target="_blank"
+                        >{{ d.w3w }} (app)</a
+                    >
+                </div>
+                <div class="link w3w">
+                    <img src="w3w.png" height="32" width="32" alt="w3w" /><a [href]="getW3WWebUrl(d)" target="_blank"
+                        >{{ d.w3w }} (web)</a
+                    >
+                </div>
+
+                <div class="link gmaps">
+                    <img src="maps.png" height="24" width="24" alt="Google Maps" />
+                    <a [href]="getGoogleMapsUrl(d)" target="_blank">Google Maps</a>
+                </div>
+
+                <div class="link apple">
+                    <img src="apple.png" height="24" width="20" alt="Apple Maps" />
+                    <a [href]="getAppleMapsUrl(d)" target="_blank">Apple Maps</a>
+                </div>
+
+                <div class="link noimg">
+                    <a [href]="getGeoURI(d)" target="_blank">geo:URI</a>
+                </div>
             }
         }
     }

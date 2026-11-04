@@ -27,7 +27,7 @@ export interface StashList {
     stashes: ShortStash[];
 }
 
-interface FullUnlockedStash extends BaseStash {
+export interface FullUnlockedStash extends BaseStash {
     locked: false;
     image: string;
     lat: number;
