@@ -21,12 +21,16 @@
                 <p class="mt-1 mb-1">The stash is live. Go go go...</p>
 
                 <div class="text-2xl font-bold mb-4 mt-2">Stash location</div>
-                <p class="mt-1 mb-1"><span class="font-bold">W3W</span> {{ d.w3w }}</p>
 
-                <div class="w-60 aspect-4/3 bg-gray-400">TODO - OpenStreetMap widget</div>
+                <app-stash-map [stash]="d"></app-stash-map>
 
+                <h3 class="text-2xl font-bold mb-4 mt-2">Description</h3>
                 <p class="mt-1 mb-1">{{ d.description }}</p>
-                <p class="mt-1 mb-1">{{ d.contents }}</p>
+
+                @if (d.contents.length) {
+                    <h3 class="text-2xl font-bold mb-4 mt-2">Contents</h3>
+                    <p class="mt-1 mb-1">{{ d.contents }}</p>
+                }
 
                 <h3 class="text-2xl font-bold mb-4 mt-2">Links</h3>
 

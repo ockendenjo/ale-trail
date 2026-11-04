@@ -5,9 +5,10 @@ import {DatePipe} from "@angular/common";
 import {StashService} from "../stash-service/stash.service";
 import {PageState} from "../page-state";
 import {FullStash, FullUnlockedStash} from "../stash-service/types";
+import {StashMap} from "../stash-map/stash-map";
 
 @Component({
-    imports: [DatePipe, RouterLink],
+    imports: [DatePipe, RouterLink, StashMap],
     selector: "app-stash-page",
     styleUrl: "./stash-page.css",
     templateUrl: "./stash-page.html",
