@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/mxschmitt/playwright-go"
-	"github.com/ockendenjo/bogale/pkg/drinks"
+	"github.com/ockendenjo/ale-trail/pkg/data"
 	g "github.com/onsi/ginkgo/v2"
 	"github.com/stretchr/testify/assert"
 )
@@ -28,7 +28,7 @@ func baseURL() string {
 	if url := os.Getenv("BASE_URL"); url != "" {
 		return url
 	}
-	return "https://dev.bogale.ockenden.io"
+	return "https://dev.ale-trail.ockenden.io"
 }
 
 func LoadHomePage(t g.FullGinkgoTInterface) playwright.Page {
@@ -142,18 +142,42 @@ func SubmitForm(t g.FullGinkgoTInterface, page playwright.Page) {
 	g.GinkgoWriter.Println("Submitted form")
 }
 
-func assertDrinksEqual(t g.FullGinkgoTInterface, expected, actual drinks.Drink) {
-	expected.Timestamp = nil
-	actual.Timestamp = nil
+func setPreviousDays(file *data.File) {
+	s0 := file.Stashes[0]
+	s1 := file.Stashes[1]
+	s2 := file.Stashes[2]
+	s3 := file.Stashes[3]
 
-	expected.PubID = 0
-	actual.PubID = 0
+	s0.Details = &data.Details{
+		Contents:    "Tasty ales",
+		Description: "In the gully",
+		Lat:         55.945227,
+		Lon:         -3.151679,
+		W3W:         "torch.film.safely",
+	}
 
-	expected.Points = 0
-	actual.Points = 0
+	s1.Details = &data.Details{
+		Contents:    "Refreshing beers",
+		Description: "Base of tree",
+		Lat:         55.949774,
+		Lon:         -3.156815,
+		W3W:         "loved.edge.coast",
+	}
 
-	expected.Letter = ""
-	actual.Letter = ""
+	s2.Details = &data.Details{
+		Contents:    "Joker IPA",
+		Description: "The Bog",
+		Lat:         55.947776,
+		Lon:         -3.165565,
+		W3W:         "logic.outfit.shadow",
+	}
 
-	assert.Equal(t, expected, actual)
+	s0.Image = "sample.jpeg"
+	s1.Image = "sample.jpeg"
+	s2.Image = "sample.jpeg"
+
+	s3.Stasher = &data.Stasher{
+		Name:  "Stasher Chelpin",
+		Email: "stasher@example.com",
+	}
 }

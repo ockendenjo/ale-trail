@@ -117,3 +117,13 @@ inputs: BINARY_BUCKET
 ```shell
 go run ./scripts/upload-binaries
 ```
+
+### test-e2e
+
+environment: AWS_PROFILE=aletrail
+environment: SHOW_BROWSER=1
+inputs: DATA_BUCKET
+
+```shell
+go test ./e2e/... -v
+```

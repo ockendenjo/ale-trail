@@ -4,13 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/mxschmitt/playwright-go"
-	"github.com/ockendenjo/bogale/pkg/user"
-	"github.com/ockendenjo/bogale/pkg/userpool"
-	"github.com/ockendenjo/handler"
 	g "github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
 	"github.com/stretchr/testify/assert"
@@ -32,26 +26,6 @@ var _ = g.SynchronizedBeforeSuite(func() {
 	})
 	assert.NoError(t, err)
 
-	awsConfig, err := config.LoadDefaultConfig(t.Context())
-	assert.NoError(t, err)
-
-	userPoolID := handler.MustGetEnv("USER_POOL_ID")
-	cognitoClient := cognitoidentityprovider.NewFromConfig(awsConfig)
-	poolClient := userpool.NewClient(cognitoClient, userPoolID)
-
-	testPassword = userpool.RandomPassword(16)
-
-	err = poolClient.AddUser(t.Context(), testEmail, testPassword)
-	assert.NoError(t, err)
-	g.GinkgoWriter.Printf("Created Cognito user %s\n", testEmail)
-
-	// Delete DynamoDB user record to ensure clean state
-	tableName := handler.MustGetEnv("USER_TABLE_NAME")
-	ddbClient := dynamodb.NewFromConfig(awsConfig)
-	userClient := user.NewClient(ddbClient, tableName)
-	err = userClient.DeleteByEmail(t.Context(), testEmail)
-	assert.NoError(t, err)
-	g.GinkgoWriter.Printf("Cleaned up DynamoDB user %s\n", testEmail)
 }, func() {
 	// Deliberately empty
 })
