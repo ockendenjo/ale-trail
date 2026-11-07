@@ -75,7 +75,6 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 		})
 
 		g.It("should check URL", func() {
-			dateStr = now.AddDate(0, 0, 1).Format(time.DateOnly)
 			AwaitURL(t, page, dateStr+"/stasher")
 		})
 
@@ -165,6 +164,62 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 			assert.NoError(t, err)
 
 			AwaitVisible(t, page, "input#lat")
+		})
+
+		g.It("should go back to home page", func() {
+			err := page.GetByTestId("home-link").Click()
+			assert.NoError(t, err)
+		})
+	})
+
+	g.Context("Set stasher (conflict)", func() {
+		var dateStr string
+		var card playwright.Locator
+
+		g.BeforeAll(func() {
+			dateStr = now.AddDate(0, 0, 2).Format(time.DateOnly)
+			card = page.GetByTestId(dateStr)
+		})
+
+		g.It("should check card contains expected text", func() {
+			text, err := card.InnerText()
+			assert.NoError(t, err)
+			assert.Contains(t, text, "Stasher needed")
+		})
+
+		g.It("should click a card", func() {
+			err := card.Click()
+			assert.NoError(t, err)
+		})
+
+		g.It("should check URL", func() {
+			AwaitURL(t, page, dateStr+"/stasher")
+		})
+
+		g.It("should update data file directly", func() {
+			file = lh.GetDataFile()
+			s5 := file.Stashes[5]
+			s5.Stasher = &data.Stasher{
+				Name:  "Stasher Baron Cohen",
+				Email: "sbc@example.com",
+			}
+			lh.PutDataFile(file)
+		})
+
+		g.It("should wait for the same file to be returned", func() {
+			lh.AwaitDataFile(func(file *data.File) bool {
+				return file.Stashes[5].Stasher != nil
+			})
+		})
+
+		g.It("should enter details in the form", func() {
+			FillFormControlInput(t, page, "name", "Harry Trotter")
+			FillFormControlInput(t, page, "email", "harry@example.com")
+			SubmitForm(t, page)
+		})
+
+		g.It("should show saved message", func() {
+			AwaitVisible(t, page, "div[data-testid='state-conflict']")
 		})
 	})
 })
