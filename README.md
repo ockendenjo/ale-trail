@@ -69,13 +69,22 @@ aws s3 cp s3://ale-trail-dev-state-20260822135440864900000002/dev.auto.tfvars tf
 aws s3 cp s3://ale-trail-dev-state-20260822135440864900000002/dev.backend.tfvars tfvars/
 ```
 
-### push-data
+### push-dev-data
 
 environment: AWS_PROFILE=aletrail
 inputs: DATA_BUCKET
 
 ```shell
 aws s3 cp data.json s3://${DATA_BUCKET}/data.json
+```
+
+### push-pro-data
+
+environment: AWS_PROFILE=aletrail
+inputs: PRO_DATA_BUCKET
+
+```shell
+aws s3 cp pro.data.json s3://${PRO_DATA_BUCKET}/data.json
 ```
 
 ### plan
@@ -125,8 +134,8 @@ go run ./scripts/upload-binaries
 environment: AWS_PROFILE=aletrail
 environment: BASE_URL=http://localhost:4200
 environment: SHOW_BROWSER=1
-inputs: DATA_BUCKET
+inputs: DEV_DATA_BUCKET
 
 ```shell
-go test -count=1 ./e2e/... -v
+DATA_BUCKET=${DEV_DATA_BUCKET} go test -count=1 ./e2e/... -v
 ```

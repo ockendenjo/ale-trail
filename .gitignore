@@ -1,6 +1,7 @@
 .idea
 stack/tfvars
 .terraform/
-data.json
+*data.json
 .golangci.json
 build/
+.env
