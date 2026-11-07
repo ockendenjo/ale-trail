@@ -62,3 +62,13 @@ jobs:
     secrets:
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
       WEB_BUCKET: ${{ secrets.WEB_BUCKET }}
+
+  e2e:
+    name: E2E
+    needs: [ui-dev]
+    permissions:
+      id-token: write # OIDC authentication with AWS
+      contents: read
+    uses: $/.github/workflows/e2e.yaml
+    secrets:
+      DATA_BUCKET: ${{ secrets.DATA_BUCKET }}

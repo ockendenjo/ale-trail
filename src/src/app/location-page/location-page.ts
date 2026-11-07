@@ -68,6 +68,10 @@ export class LocationPage implements OnInit {
                 this.pg.set({state: "ERROR", error: e});
             });
     }
+
+    public editAgain(): void {
+        this.pg.set({state: "LOADED", data: undefined});
+    }
 }
 
 type LocationPageState = PageState<void> | StateSaving | StateSaved;
