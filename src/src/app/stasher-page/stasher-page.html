@@ -69,16 +69,16 @@
             </form>
         }
         @case ("SAVING") {
-            <div>Submitting...</div>
+            <div data-tesid="state-saving">Submitting...</div>
         }
         @case ("SAVED") {
-            <div>Saved - we'll be in touch with a reminder email nearer the time</div>
+            <div data-testid="state-saved">Saved - we'll be in touch with a reminder email nearer the time</div>
         }
         @case ("CONFLICT") {
-            <div>This stash already has a volunteer stasher.</div>
+            <div data-testid="state-conflict">This stash already has a volunteer stasher.</div>
         }
         @case ("ERROR") {
-            <div>Something went wrong</div>
+            <div data-testid="state-error">Something went wrong</div>
         }
     }
 </div>
