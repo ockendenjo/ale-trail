@@ -3,7 +3,7 @@
 
     @switch (pg().state) {
         @case ("LOADING") {
-            <div>Loading...</div>
+            <div data-testid="state-loading">Loading...</div>
         }
         @case ("LOADED") {
             <form [formGroup]="form" (submit)="submit()">
@@ -81,13 +81,16 @@
             </form>
         }
         @case ("ERROR") {
-            <div>Something went wrong</div>
+            <div data-testid="state-error">Something went wrong</div>
         }
         @case ("SAVING") {
-            <div>Saving...</div>
+            <div data-testid="state-saving">Saving...</div>
         }
         @case ("SAVED") {
-            <div>Stash location successfully updated</div>
+            <div data-testid="state-saved">
+                <div>Stash location successfully updated</div>
+                <div class="mt-2"><a (click)="editAgain()" class="link" data-testid="edit-again">Edit again</a></div>
+            </div>
         }
     }
 </div>

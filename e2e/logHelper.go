@@ -1,7 +1,6 @@
 package e2e
 
 import (
-	"errors"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -51,24 +50,24 @@ func (h *LogHelper) AwaitDataFile(p func(*data.File) bool) *data.File {
 		if err != nil {
 			return nil, err
 		}
-		isMatch := p(fileWithETag.File)
-		if !isMatch {
-			return nil, errors.New("predicate failed")
-		}
 		return fileWithETag.File, nil
 	}
 
-	policy := retryPolicy[*data.File]()
+	policy := retryWithPredicate(p)
 
 	file, err := failsafe.With(policy).Get(getFile)
+
 	assert.NoError(h.t, err)
 	return file
 }
 
-func retryPolicy[T any]() retrypolicy.RetryPolicy[T] {
+func retryWithPredicate[T any](p func(t T) bool) retrypolicy.RetryPolicy[T] {
 	return retrypolicy.NewBuilder[T]().
-		HandleIf(func(_ T, err error) bool {
-			return err != nil
+		HandleIf(func(data T, err error) bool {
+			if err != nil {
+				return true
+			}
+			return !p(data)
 		}).
 		WithMaxRetries(10).
 		WithBackoff(100*time.Millisecond, time.Second).

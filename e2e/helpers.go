@@ -11,10 +11,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const testEmail = "e2e-test@ockenden.io"
-
-var testPassword string
-
 func TestCase(id, title string, args ...any) bool {
 	fullTitle := fmt.Sprintf("%s - %s", id, title)
 	return g.Describe(fullTitle, g.Label(id), g.Ordered, args)
@@ -47,18 +43,18 @@ func LoadHomePage(t g.FullGinkgoTInterface) playwright.Page {
 	return page
 }
 
+func AwaitVisible(t g.FullGinkgoTInterface, page playwright.Page, selector string) {
+	loc := page.Locator(selector)
+	err := playwright.NewPlaywrightAssertions(10_000).Locator(loc).ToBeVisible()
+	assert.NoError(t, err)
+}
+
 func NavigateTo(t g.FullGinkgoTInterface, page playwright.Page, path string) {
 	url := fmt.Sprintf("%s/%s", baseURL(), path)
 	res, err := page.Goto(url)
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, res.Status(), "navigating to %s returned HTTP %d", path, res.Status())
 	g.GinkgoWriter.Printf("Navigated to %s\n", page.URL())
-}
-
-func ExpectH1(t g.FullGinkgoTInterface, page playwright.Page, expected string) {
-	h1, err := page.Locator("h1").TextContent()
-	assert.NoError(t, err)
-	assert.Contains(t, h1, expected)
 }
 
 func AwaitURL(t g.FullGinkgoTInterface, page playwright.Page, path string) {
@@ -68,27 +64,6 @@ func AwaitURL(t g.FullGinkgoTInterface, page playwright.Page, path string) {
 	g.GinkgoWriter.Printf("Page URL is now: %s\n", url)
 }
 
-func SignIn(t g.FullGinkgoTInterface, page playwright.Page, email, password string) {
-	err := page.Locator("button#sign-in").Click()
-	assert.NoError(t, err)
-	err = page.WaitForLoadState(playwright.PageWaitForLoadStateOptions{State: playwright.LoadStateLoad, Timeout: new(15_000.0)})
-	assert.NoError(t, err)
-
-	loc := page.Locator(`input[name="username"]`)
-	err = playwright.NewPlaywrightAssertions(10_000).Locator(loc).ToBeEnabled()
-	assert.NoError(t, err)
-	err = loc.Fill(email)
-	assert.NoError(t, err)
-
-	err = page.Locator(`input[name="password"]`).Fill(password)
-	assert.NoError(t, err)
-
-	err = page.Locator(`button[type="submit"]`).Click()
-	assert.NoError(t, err)
-
-	g.GinkgoWriter.Println("Submitted Cognito sign-in form")
-}
-
 func FillFormControlInput(t g.FullGinkgoTInterface, page playwright.Page, formControlName, value string) {
 	locator := page.Locator(fmt.Sprintf(`input[formcontrolname="%s"]`, formControlName)).First()
 	err := playwright.NewPlaywrightAssertions(5_000).Locator(locator).ToBeEnabled()
@@ -96,11 +71,6 @@ func FillFormControlInput(t g.FullGinkgoTInterface, page playwright.Page, formCo
 	err = locator.Fill(value)
 	assert.NoError(t, err)
 	g.GinkgoWriter.Printf("Filled formControlName=%q\n", formControlName)
-}
-
-func FillModelInput(t g.FullGinkgoTInterface, page playwright.Page, name, value string) {
-	locator := page.Locator(fmt.Sprintf(`input#%s`, name)).First()
-	fillLocatorInput(t, locator, name, value)
 }
 
 func fillLocatorInput(t g.FullGinkgoTInterface, locator playwright.Locator, name string, value string) {
@@ -114,21 +84,6 @@ func fillLocatorInput(t g.FullGinkgoTInterface, locator playwright.Locator, name
 func FillTextarea(t g.FullGinkgoTInterface, page playwright.Page, name, value string) {
 	locator := page.Locator(fmt.Sprintf(`textarea#%s`, name)).First()
 	fillLocatorInput(t, locator, name, value)
-}
-
-func FillAutocompleteInput(t g.FullGinkgoTInterface, page playwright.Page, name, value string) {
-	locator := page.Locator(fmt.Sprintf(`input#%s`, name)).First()
-	err := playwright.NewPlaywrightAssertions(5_000).Locator(locator).ToBeEnabled()
-	assert.NoError(t, err, "autocomplete field name=%q is not enabled", name)
-	err = locator.Fill(value)
-	assert.NoError(t, err)
-
-	option := page.Locator("mat-option").First()
-	err = playwright.NewPlaywrightAssertions(5_000).Locator(option).ToBeVisible()
-	assert.NoError(t, err, "no mat-option visible after typing %q into name=%q", value, name)
-	err = option.Click()
-	assert.NoError(t, err)
-	g.GinkgoWriter.Printf("Filled autocomplete name=%q with %q\n", name, value)
 }
 
 func SubmitForm(t g.FullGinkgoTInterface, page playwright.Page) {
