@@ -52,7 +52,7 @@ jobs:
 
       - name: Build
         working-directory: src
-        run: npx ng build --configuration aws-dev
+        run: npx ng build --configuration aws-${{ inputs.environment }}
 
       - name: Assume role
         if: inputs.upload_ui
