@@ -88,7 +88,7 @@ resource "aws_cloudfront_response_headers_policy" "no_cache" {
 }
 
 resource "aws_cloudfront_function" "rewrite_index" {
-  name    = "mygp-rewrite-index-${var.env}"
+  name    = "ale-trail-rewrite-index-${var.env}"
   runtime = "cloudfront-js-2.0"
   publish = true
   code    = <<-EOF

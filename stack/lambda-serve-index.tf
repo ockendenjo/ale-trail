@@ -1,6 +1,6 @@
 module "lambda_serve_index" {
   source                   = "github.com/ockendenjo/tfmods//lambda"
-  project_name             = "mygp"
+  project_name             = "ale-trail"
   aws_env                  = var.env
   name                     = "serve-index"
   permissions_boundary_arn = var.permissions_boundary_arn
