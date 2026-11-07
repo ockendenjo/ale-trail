@@ -10,7 +10,7 @@ require (
 	github.com/aws/smithy-go v1.28.8
 	github.com/failsafe-go/failsafe-go v0.9.8
 	github.com/mxschmitt/playwright-go v0.6401.0
-	github.com/ockendenjo/handler v1.0.9
+	github.com/ockendenjo/handler v1.0.10
 	github.com/onsi/ginkgo/v2 v2.34.0
 	github.com/onsi/gomega v1.44.0
 	github.com/stretchr/testify v1.12.1
