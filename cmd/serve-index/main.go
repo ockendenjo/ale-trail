@@ -55,7 +55,7 @@ func (h *lambdaHandler) handle(ctx *handler.Context, _ events.APIGatewayProxyReq
 	csp := strings.Join([]string{
 		"default-src 'self'",
 		"script-src 'self' 'nonce-" + nonce + "'",
-		"style-src 'self'",
+		"style-src 'self' 'unsafe-inline'",
 		"font-src 'self'",
 		"img-src 'self' data:",
 		"frame-ancestors 'none'",
