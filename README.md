@@ -54,6 +54,8 @@ directory: stack
 ```shell
 aws s3 cp tfvars/dev.auto.tfvars s3://ale-trail-dev-state-20260822135440864900000002
 aws s3 cp tfvars/dev.backend.tfvars s3://ale-trail-dev-state-20260822135440864900000002
+aws s3 cp tfvars/pro.auto.tfvars s3://ale-trail-pro-state-20261107134939439300000002
+aws s3 cp tfvars/pro.backend.tfvars s3://ale-trail-pro-state-20261107134939439300000002
 ```
 
 ### pull-config
