@@ -73,3 +73,18 @@ jobs:
     secrets:
       DATA_BUCKET: ${{ secrets.DATA_BUCKET }}
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+
+  tf-pro:
+    name: tf-pro
+    needs: [e2e]
+    concurrency:
+      group: pro
+    permissions:
+      id-token: write # OIDC authentication with AWS
+      contents: read
+    uses: $/.github/workflows/tf-apply.yaml
+    with:
+      environment: pro
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+      STATE_BUCKET: ${{ secrets.STATE_BUCKET }}
