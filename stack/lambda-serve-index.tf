@@ -13,7 +13,7 @@ module "lambda_serve_index" {
 }
 
 module "iam_s3_serve_index" {
-  source     = "./iam-s3"
+  source     = "github.com/ockendenjo/tfmods//iam-s3"
   role_id    = module.lambda_serve_index.role_id
   bucket_arn = aws_s3_bucket.static_web.arn
 }
