@@ -17,12 +17,6 @@ terraform apply -var-file=tfvars/dev.auto.tfvars -auto-approve
 go run ./scripts/build-cmd --zip
 ```
 
-### env
-
-```shell
-set -o allexport; source .env; set +o allexport
-```
-
 ### format
 
 requires: format-tf, format-ng
@@ -140,8 +134,8 @@ go run ./scripts/upload-binaries
 environment: AWS_PROFILE=aletrail
 environment: BASE_URL=http://localhost:4200
 environment: SHOW_BROWSER=1
-inputs: DATA_BUCKET
+inputs: DEV_DATA_BUCKET
 
 ```shell
-go test -count=1 ./e2e/... -v
+DATA_BUCKET=${DEV_DATA_BUCKET} go test -count=1 ./e2e/... -v
 ```
