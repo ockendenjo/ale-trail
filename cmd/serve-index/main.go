@@ -57,7 +57,7 @@ func (h *lambdaHandler) handle(ctx *handler.Context, _ events.APIGatewayProxyReq
 		"script-src 'self' 'nonce-" + nonce + "'",
 		"style-src 'self' 'unsafe-inline'",
 		"font-src 'self'",
-		"img-src 'self' data:",
+		"img-src 'self' https://tile.openstreetmap.org/ data:",
 		"frame-ancestors 'none'",
 	}, "; ")
 
