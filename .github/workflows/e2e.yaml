@@ -5,6 +5,8 @@ on:
     secrets:
       DATA_BUCKET:
         required: true
+      AWS_ROLE_ARN:
+        required: true
 
 permissions:
   contents: read
