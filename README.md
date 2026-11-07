@@ -17,6 +17,12 @@ terraform apply -var-file=tfvars/dev.auto.tfvars -auto-approve
 go run ./scripts/build-cmd --zip
 ```
 
+### env
+
+```shell
+set -o allexport; source .env; set +o allexport
+```
+
 ### format
 
 requires: format-tf, format-ng
@@ -69,13 +75,22 @@ aws s3 cp s3://ale-trail-dev-state-20260822135440864900000002/dev.auto.tfvars tf
 aws s3 cp s3://ale-trail-dev-state-20260822135440864900000002/dev.backend.tfvars tfvars/
 ```
 
-### push-data
+### push-dev-data
 
 environment: AWS_PROFILE=aletrail
 inputs: DATA_BUCKET
 
 ```shell
 aws s3 cp data.json s3://${DATA_BUCKET}/data.json
+```
+
+### push-pro-data
+
+environment: AWS_PROFILE=aletrail
+inputs: PRO_DATA_BUCKET
+
+```shell
+aws s3 cp pro.data.json s3://${PRO_DATA_BUCKET}/data.json
 ```
 
 ### plan
