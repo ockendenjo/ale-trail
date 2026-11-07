@@ -46,6 +46,18 @@ resource "aws_cloudfront_response_headers_policy" "no_cache" {
   }
 }
 
+resource "aws_cloudfront_function" "rewrite_index" {
+  name    = "mygp-rewrite-index-${var.env}"
+  runtime = "cloudfront-js-2.0"
+  publish = true
+  code    = <<-EOF
+    function handler(event) {
+      event.request.uri = '/api/index.html';
+      return event.request;
+    }
+  EOF
+}
+
 resource "aws_cloudfront_distribution" "ale_trail" {
   comment             = "ale trail (${var.env})"
   enabled             = true
@@ -86,6 +98,22 @@ resource "aws_cloudfront_distribution" "ale_trail" {
   }
 
   ordered_cache_behavior {
+    path_pattern               = "/"
+    target_origin_id           = "s3-static"
+    viewer_protocol_policy     = "redirect-to-https"
+    compress                   = true
+    cache_policy_id            = data.aws_cloudfront_cache_policy.caching_disabled.id
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.index_html.id
+    allowed_methods            = ["GET", "HEAD"]
+    cached_methods             = ["GET", "HEAD"]
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.rewrite_index.arn
+    }
+  }
+
+  ordered_cache_behavior {
     path_pattern               = "index.html"
     target_origin_id           = "s3-static"
     viewer_protocol_policy     = "redirect-to-https"
@@ -94,6 +122,11 @@ resource "aws_cloudfront_distribution" "ale_trail" {
     response_headers_policy_id = aws_cloudfront_response_headers_policy.index_html.id
     allowed_methods            = ["GET", "HEAD"]
     cached_methods             = ["GET", "HEAD"]
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.rewrite_index.arn
+    }
   }
 
   ordered_cache_behavior {

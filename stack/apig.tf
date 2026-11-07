@@ -28,6 +28,11 @@ resource "aws_api_gateway_deployment" "main" {
       aws_api_gateway_integration.get_stash,
       aws_api_gateway_method.list_stashes,
       aws_api_gateway_integration.list_stashes,
+
+      // index.html
+      aws_api_gateway_resource.index,
+      aws_api_gateway_method.serve_index,
+      aws_api_gateway_integration.serve_index,
     ]))
   }
 
@@ -51,6 +56,12 @@ resource "aws_api_gateway_resource" "api" {
 resource "aws_api_gateway_resource" "stashes" {
   parent_id   = aws_api_gateway_resource.api.id
   path_part   = "stashes"
+  rest_api_id = aws_api_gateway_rest_api.main.id
+}
+
+resource "aws_api_gateway_resource" "index" {
+  parent_id   = aws_api_gateway_resource.api.id
+  path_part   = "index.html"
   rest_api_id = aws_api_gateway_rest_api.main.id
 }
 
