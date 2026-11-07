@@ -8,10 +8,51 @@ resource "aws_cloudfront_origin_access_control" "s3" {
 resource "aws_cloudfront_response_headers_policy" "robots" {
   name = "ale-trail-robots-${var.env}"
 
+  security_headers_config {
+    strict_transport_security {
+      access_control_max_age_sec = 31536000
+      include_subdomains         = true
+      preload                    = true
+      override                   = true
+    }
+
+    frame_options {
+      frame_option = "DENY"
+      override     = true
+    }
+
+    content_type_options {
+      override = true
+    }
+
+    referrer_policy {
+      referrer_policy = "strict-origin-when-cross-origin"
+      override        = true
+    }
+  }
+
   custom_headers_config {
     items {
       header   = "X-Robots-Tag"
       value    = "noindex, nofollow, noarchive, nosnippet"
+      override = true
+    }
+
+    items {
+      header   = "Permissions-Policy"
+      value    = "camera=(), microphone=(), geolocation=(), payment=()"
+      override = true
+    }
+
+    items {
+      header   = "Cross-Origin-Opener-Policy"
+      value    = "same-origin"
+      override = true
+    }
+
+    items {
+      header   = "Cross-Origin-Resource-Policy"
+      value    = "same-origin"
       override = true
     }
   }
