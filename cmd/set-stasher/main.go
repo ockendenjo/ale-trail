@@ -21,7 +21,7 @@ func main() {
 		s3Client := s3.NewFromConfig(awsConfig)
 
 		h := &lambdaHandler{Client: data.NewClient(s3Client, bucketName)}
-		return apighandler.GetHandler(h.handle, http.StatusNoContent)
+		return apighandler.GetHandler(h.handle, http.StatusOK)
 	})
 }
 
@@ -46,7 +46,7 @@ func (h *lambdaHandler) handle(ctx *handler.Context, event events.APIGatewayProx
 	return h.handleRequest(ctx, date, req)
 }
 
-func (h *lambdaHandler) handleRequest(ctx *handler.Context, date string, req *SetStasherRequest) (any, error) {
+func (h *lambdaHandler) handleRequest(ctx *handler.Context, date string, req *SetStasherRequest) (*SetStasherResponse, error) {
 	logger := ctx.GetLogger()
 
 	fileWithEtag, err := h.Client.GetDataFile(ctx)
@@ -78,7 +78,8 @@ func (h *lambdaHandler) handleRequest(ctx *handler.Context, date string, req *Se
 	}
 	logger.Info("Set stasher info")
 
-	foundStash.StashKey = uuid.New().String()
+	newKey := uuid.New().String()
+	foundStash.StashKey = newKey
 	logger.Info("Updated stash key")
 
 	//Write file back
@@ -90,10 +91,20 @@ func (h *lambdaHandler) handleRequest(ctx *handler.Context, date string, req *Se
 		return nil, apighandler.HttpError{StatusCode: http.StatusInternalServerError, CWLogErr: err}
 	}
 	logger.Info("Wrote data file to S3")
-	return nil, nil
+
+	resp := &SetStasherResponse{
+		Date: date,
+		Key:  newKey,
+	}
+	return resp, nil
 }
 
 func isPreconditionFailed(err error) bool {
 	var respErr *smithyhttp.ResponseError
 	return errors.As(err, &respErr) && respErr.HTTPStatusCode() == http.StatusPreconditionFailed
+}
+
+type SetStasherResponse struct {
+	Date string
+	Key  string
 }

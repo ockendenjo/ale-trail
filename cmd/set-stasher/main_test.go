@@ -19,7 +19,7 @@ func Test_handleRequest(t *testing.T) {
 	testcases := []struct {
 		name        string
 		setupClient func(c *teststubs.MockDataClient)
-		checkFn     func(t *testing.T, c *teststubs.MockDataClient, err error)
+		checkFn     func(t *testing.T, c *teststubs.MockDataClient, res *SetStasherResponse, err error)
 	}{
 		{
 			name: "success",
@@ -35,7 +35,7 @@ func Test_handleRequest(t *testing.T) {
 				}),
 				PutOk,
 			),
-			checkFn: func(t *testing.T, c *teststubs.MockDataClient, err error) {
+			checkFn: func(t *testing.T, c *teststubs.MockDataClient, res *SetStasherResponse, err error) {
 				require.NoError(t, err)
 
 				assert.NotNil(t, c.PutFileWithEtagData)
@@ -45,6 +45,12 @@ func Test_handleRequest(t *testing.T) {
 				assert.Equal(t, "John", s.Stasher.Name)
 				assert.Equal(t, "john@example.com", s.Stasher.Email)
 				assert.NotEqual(t, "oldKey", s.StashKey)
+
+				expRes := SetStasherResponse{
+					Date: "2026-10-25",
+					Key:  s.StashKey,
+				}
+				assert.Equal(t, expRes, *res)
 			},
 		},
 		{
@@ -78,14 +84,14 @@ func Test_handleRequest(t *testing.T) {
 			tc.setupClient(dataClient)
 
 			h := &lambdaHandler{Client: dataClient}
-			_, err := h.handleRequest(handler.Get(t.Context()), "2026-10-25", &SetStasherRequest{Name: "John", Email: "john@example.com"})
-			tc.checkFn(t, dataClient, err)
+			res, err := h.handleRequest(handler.Get(t.Context()), "2026-10-25", &SetStasherRequest{Name: "John", Email: "john@example.com"})
+			tc.checkFn(t, dataClient, res, err)
 		})
 	}
 }
 
-func IsHttpError(statusCode int) func(t *testing.T, _ *teststubs.MockDataClient, err error) {
-	return func(t *testing.T, _ *teststubs.MockDataClient, err error) {
+func IsHttpError(statusCode int) func(t *testing.T, _ *teststubs.MockDataClient, _ *SetStasherResponse, err error) {
+	return func(t *testing.T, _ *teststubs.MockDataClient, _ *SetStasherResponse, err error) {
 		httpErr, isErr := errors.AsType[apighandler.HttpError](err)
 		require.True(t, isErr, "error not expected type")
 		assert.Equal(t, statusCode, httpErr.StatusCode)
