@@ -50,6 +50,13 @@ jobs:
         working-directory: src
         run: npx eslint
 
+      - name: Write build info JS
+        shell: bash
+        run: |
+          COUNT=$(git rev-list --count HEAD)
+          echo "Build version is v.${COUNT}"
+          echo "export const gitCount = ${COUNT};" > src/src/app/build.ts
+
       - name: Build
         working-directory: src
         run: npx ng build --configuration aws-${INPUTS_ENVIRONMENT}

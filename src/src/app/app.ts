@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit, signal} from "@angular/core";
 import {RouterLink, RouterOutlet} from "@angular/router";
 import {UpdateService} from "./update.service";
 import {environment} from "../environments/environment.dev";
+import {gitCount} from "./build";
 
 @Component({
     imports: [RouterOutlet, RouterLink],
@@ -32,4 +33,6 @@ export class App implements OnInit, OnDestroy {
         document.removeEventListener("visibilitychange", this._visibilityListener);
         window.removeEventListener("focus", this._visibilityListener);
     }
+
+    protected readonly gitCount = gitCount;
 }

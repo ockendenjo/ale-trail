@@ -3,6 +3,7 @@ import {CardComponent} from "../card/card.component";
 import {PageState} from "../page-state";
 import {StashService} from "../stash-service/stash.service";
 import {ShortStash} from "../stash-service/types";
+import {gitCount} from "../build";
 
 @Component({
     imports: [CardComponent],
@@ -25,4 +26,6 @@ export class HomePage implements OnInit {
                 this.st.set({state: "ERROR", error: err});
             });
     }
+
+    protected readonly gitCount = gitCount;
 }
