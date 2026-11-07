@@ -72,3 +72,4 @@ jobs:
     uses: $/.github/workflows/e2e.yaml
     secrets:
       DATA_BUCKET: ${{ secrets.DATA_BUCKET }}
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}

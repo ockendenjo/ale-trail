@@ -14,7 +14,9 @@ jobs:
     name: E2E
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    environment: dev
+    environment:
+      name: dev
+      deployment: false
     permissions:
       id-token: write # OIDC authentication with AWS
       contents: read
