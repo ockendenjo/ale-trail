@@ -58,23 +58,6 @@ resource "aws_cloudfront_response_headers_policy" "robots" {
   }
 }
 
-resource "aws_cloudfront_response_headers_policy" "index_html" {
-  name = "ale-trail-index-html-${var.env}"
-
-  custom_headers_config {
-    items {
-      header   = "X-Robots-Tag"
-      value    = "noindex, nofollow, noarchive, nosnippet"
-      override = true
-    }
-    items {
-      header   = "Cache-Control"
-      value    = "no-cache, max-age=0, must-revalidate"
-      override = true
-    }
-  }
-}
-
 resource "aws_cloudfront_response_headers_policy" "no_cache" {
   name = "bogale-no-cache-${var.env}"
 
@@ -144,7 +127,7 @@ resource "aws_cloudfront_distribution" "ale_trail" {
     viewer_protocol_policy     = "redirect-to-https"
     compress                   = true
     cache_policy_id            = data.aws_cloudfront_cache_policy.caching_disabled.id
-    response_headers_policy_id = aws_cloudfront_response_headers_policy.index_html.id
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.robots.id
     allowed_methods            = ["GET", "HEAD"]
     cached_methods             = ["GET", "HEAD"]
 
@@ -160,7 +143,7 @@ resource "aws_cloudfront_distribution" "ale_trail" {
     viewer_protocol_policy     = "redirect-to-https"
     compress                   = true
     cache_policy_id            = data.aws_cloudfront_cache_policy.caching_disabled.id
-    response_headers_policy_id = aws_cloudfront_response_headers_policy.index_html.id
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.robots.id
     allowed_methods            = ["GET", "HEAD"]
     cached_methods             = ["GET", "HEAD"]
 
