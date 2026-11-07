@@ -85,6 +85,10 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 			SubmitForm(t, page)
 		})
 
+		g.It("should show saved message", func() {
+			AwaitVisible(t, page, "div[data-testid='state-saved']")
+		})
+
 		g.It("should validate the data file has been updated", func() {
 			file := lh.AwaitDataFile(func(file *data.File) bool {
 				return file.Stashes[4].Stasher != nil

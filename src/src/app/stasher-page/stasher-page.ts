@@ -56,6 +56,7 @@ export class StasherPage {
         fetch(`/api/stashes/${this.date}/stasher`, {method: "POST", body: JSON.stringify(value)})
             .then((r) => {
                 switch (r.status) {
+                    case 200:
                     case 204:
                         this.st.set("SAVED");
                         break;
