@@ -139,34 +139,24 @@ resource "aws_cloudfront_distribution" "ale_trail" {
 
   ordered_cache_behavior {
     path_pattern               = "/"
-    target_origin_id           = "apig"
+    target_origin_id           = "s3-static"
     viewer_protocol_policy     = "redirect-to-https"
     compress                   = true
     cache_policy_id            = data.aws_cloudfront_cache_policy.caching_disabled.id
     response_headers_policy_id = aws_cloudfront_response_headers_policy.robots.id
     allowed_methods            = ["GET", "HEAD"]
     cached_methods             = ["GET", "HEAD"]
-
-    function_association {
-      event_type   = "viewer-request"
-      function_arn = aws_cloudfront_function.rewrite_index.arn
-    }
   }
 
   ordered_cache_behavior {
     path_pattern               = "index.html"
-    target_origin_id           = "apig"
+    target_origin_id           = "s3-static"
     viewer_protocol_policy     = "redirect-to-https"
     compress                   = true
     cache_policy_id            = data.aws_cloudfront_cache_policy.caching_disabled.id
     response_headers_policy_id = aws_cloudfront_response_headers_policy.robots.id
     allowed_methods            = ["GET", "HEAD"]
     cached_methods             = ["GET", "HEAD"]
-
-    function_association {
-      event_type   = "viewer-request"
-      function_arn = aws_cloudfront_function.rewrite_index.arn
-    }
   }
 
   ordered_cache_behavior {
@@ -205,13 +195,13 @@ resource "aws_cloudfront_distribution" "ale_trail" {
   custom_error_response {
     error_code         = 403
     response_code      = 200
-    response_page_path = "/api/index.html"
+    response_page_path = "index.html"
   }
 
   custom_error_response {
     error_code         = 404
     response_code      = 200
-    response_page_path = "/api/index.html"
+    response_page_path = "index.html"
   }
 
   restrictions {
