@@ -20,9 +20,10 @@
         </div>
     } @else {
         <div
-            class="aspect-4/3 flex flex-col items-center overflow-hidden relative locked border-4 border-white"
+            class="aspect-4/3 flex flex-col items-center overflow-hidden relative border-4 border-white"
             [routerLink]="getLink(card)"
             [attr.data-testid]="card.date"
+            [ngClass]="card.displayClass"
         >
             <div class="lock-container flex flex-row content-center items-center">
                 <img src="lock.svg" alt="Lock" class="p-2 w-10 h-10" />
