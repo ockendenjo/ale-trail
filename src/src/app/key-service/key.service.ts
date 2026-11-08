@@ -23,6 +23,15 @@ export class KeyService {
         return record[date];
     }
 
+    public getDatesWithKey(): Set<string> {
+        const record = this.readValue();
+        const s = new Set<string>();
+        Object.keys(record).forEach((k) => {
+            s.add(k);
+        });
+        return s;
+    }
+
     private readValue(): Record<string, string> {
         const rawValue = localStorage.getItem(environment.storageKey) || "{}";
         return JSON.parse(rawValue) || {};
