@@ -21,7 +21,16 @@ export class App implements OnInit, OnDestroy {
     }
 
     private visibilityListener(): void {
-        this.updateSvc.checkForUpdate().catch(console.error);
+        this.updateSvc
+            .checkForUpdate()
+            .then((b) => {
+                if (b) {
+                    console.log("Application update available");
+                } else {
+                    console.log("Application update not available");
+                }
+            })
+            .catch(console.error);
     }
 
     ngOnInit() {
