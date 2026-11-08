@@ -1,20 +1,20 @@
 import {Injectable} from "@angular/core";
-import {FullStash, ShortStash, Stasher, StasherResponse, StashList} from "./types";
+import {FullStash, Stasher, StasherResponse, StashList, UIShortStash} from "./types";
 import {KeyService} from "../key-service/key.service";
 
 @Injectable({providedIn: "root"})
 export class StashService {
     constructor(private readonly keySvc: KeyService) {}
 
-    public async listStashes(): Promise<ShortStash[]> {
+    public async listStashes(): Promise<UIShortStash[]> {
         const r = await fetch("/api/stashes");
         const j = (await r.json()) as StashList;
         const datesWithKey = this.keySvc.getDatesWithKey();
 
-        j.stashes.forEach((s) => {
-            s.hasKey = datesWithKey.has(s.date);
+        return j.stashes.map((i) => {
+            const hasKey = datesWithKey.has(i.date);
+            return {...i, hasKey, displayImage: ""};
         });
-        return j.stashes;
     }
 
     public async getStash(date: string): Promise<FullStash> {

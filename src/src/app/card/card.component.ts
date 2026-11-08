@@ -1,7 +1,7 @@
 import {Component, Input} from "@angular/core";
 import {getDayStr, getMonthStr} from "../dateUtils";
 import {RouterLink} from "@angular/router";
-import {ShortStash} from "../stash-service/types";
+import {ShortStash, UIShortStash} from "../stash-service/types";
 
 @Component({
     imports: [RouterLink],
@@ -10,7 +10,7 @@ import {ShortStash} from "../stash-service/types";
     templateUrl: "./card.component.html",
 })
 export class CardComponent {
-    @Input() card!: ShortStash;
+    @Input() card!: UIShortStash;
 
     public getDay(c: ShortStash): string {
         const day = c.date.split("-")[2];

@@ -2,7 +2,7 @@ import {Component, OnInit, signal} from "@angular/core";
 import {CardComponent} from "../card/card.component";
 import {PageState} from "../page-state";
 import {StashService} from "../stash-service/stash.service";
-import {ShortStash} from "../stash-service/types";
+import {UIShortStash} from "../stash-service/types";
 import {gitCount} from "../build";
 
 @Component({
@@ -12,7 +12,7 @@ import {gitCount} from "../build";
     templateUrl: "./home-page.html",
 })
 export class HomePage implements OnInit {
-    public st = signal<PageState<ShortStash[]>>({state: "LOADING"});
+    public st = signal<PageState<UIShortStash[]>>({state: "LOADING"});
 
     constructor(private readonly stashSvc: StashService) {}
 
