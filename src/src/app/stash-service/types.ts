@@ -38,3 +38,13 @@ export interface FullUnlockedStash extends BaseStash {
 }
 
 export type FullStash = FullUnlockedStash | RandomTimedStash | TimedStash;
+
+export interface Stasher {
+    name: string;
+    email: string;
+}
+
+export interface StasherResponse {
+    date: string;
+    key: string;
+}
