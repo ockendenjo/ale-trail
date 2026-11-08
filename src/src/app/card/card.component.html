@@ -26,6 +26,14 @@
         >
             <div class="lock-container flex flex-row content-center items-center">
                 <img src="lock.svg" alt="Lock" class="p-2 w-10 h-10" />
+                @if (card.hasKey) {
+                    <img
+                        src="location_on.svg"
+                        alt="Location icon"
+                        class="p-2 w-10 h-10"
+                        title="You are hosting this stash"
+                    />
+                }
                 @if (card.releaseType == "TIMED" && card.releaseTime) {
                     Revealed at {{ card.releaseTime }}
                 }

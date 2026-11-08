@@ -9,6 +9,11 @@ export class StashService {
     public async listStashes(): Promise<ShortStash[]> {
         const r = await fetch("/api/stashes");
         const j = (await r.json()) as StashList;
+        const datesWithKey = this.keySvc.getDatesWithKey();
+
+        j.stashes.forEach((s) => {
+            s.hasKey = datesWithKey.has(s.date);
+        });
         return j.stashes;
     }
 

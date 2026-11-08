@@ -1,5 +1,6 @@
 interface BaseStash {
     date: string;
+    hasKey: boolean;
     locked: boolean;
 }
 
