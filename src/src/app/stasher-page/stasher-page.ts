@@ -4,6 +4,7 @@ import {take} from "rxjs";
 import {getDayStr, getMonthStr} from "../dateUtils";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgClass} from "@angular/common";
+import {StashService} from "../stash-service/stash.service";
 
 @Component({
     imports: [ReactiveFormsModule, NgClass],
@@ -18,8 +19,9 @@ export class StasherPage {
     public form: FormGroup;
 
     constructor(
-        private readonly ar: ActivatedRoute,
+        ar: ActivatedRoute,
         private readonly formBuilder: FormBuilder,
+        private readonly stashSvc: StashService,
     ) {
         ar.params.pipe(take(1)).subscribe((x) => {
             this.date = x["date"];
@@ -53,7 +55,8 @@ export class StasherPage {
         const value = this.form.value;
 
         this.st.set("SAVING");
-        fetch(`/api/stashes/${this.date}/stasher`, {method: "POST", body: JSON.stringify(value)})
+        this.stashSvc
+            .setStasher(this.date, value)
             .then((r) => {
                 switch (r.status) {
                     case 200:
