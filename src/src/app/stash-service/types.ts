@@ -24,6 +24,11 @@ interface UnlockedStash extends BaseStash {
 
 export type ShortStash = UnlockedStash | RandomTimedStash | TimedStash;
 
+export type UIShortStash = ShortStash & {
+    hasKey: boolean;
+    displayImage: string;
+};
+
 export interface StashList {
     stashes: ShortStash[];
 }
