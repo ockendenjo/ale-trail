@@ -52,23 +52,23 @@ func (h *lambdaHandler) handle(ctx *handler.Context, _ events.APIGatewayProxyReq
 
 	html := strings.ReplaceAll(string(htmlBytes), "__NONCE__", nonce)
 
-	csp := strings.Join([]string{
-		"default-src 'self'",
-		"script-src 'self' 'nonce-" + nonce + "'",
-		"style-src 'self' 'unsafe-inline'",
-		"font-src 'self'",
-		"connect-src 'self'",
-		"worker-src 'self'",
-		"img-src 'self' https://tile.openstreetmap.org/ data:",
-		"frame-ancestors 'none'",
-	}, "; ")
+	//csp := strings.Join([]string{
+	//	"default-src 'self'",
+	//	"script-src 'self' 'nonce-" + nonce + "'",
+	//	"style-src 'self' 'unsafe-inline'",
+	//	"font-src 'self'",
+	//	"connect-src 'self'",
+	//	"worker-src 'self'",
+	//	"img-src 'self' https://tile.openstreetmap.org/ data:",
+	//	"frame-ancestors 'none'",
+	//}, "; ")
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
 		Headers: map[string]string{
-			"Content-Type":            "text/html; charset=utf-8",
-			"Cache-Control":           "no-store",
-			"Content-Security-Policy": csp,
+			"Content-Type":  "text/html; charset=utf-8",
+			"Cache-Control": "no-store",
+			//"Content-Security-Policy": csp,
 		},
 		Body: html,
 	}, nil
