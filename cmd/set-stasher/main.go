@@ -105,6 +105,6 @@ func isPreconditionFailed(err error) bool {
 }
 
 type SetStasherResponse struct {
-	Date string
-	Key  string
+	Date string `json:"date"`
+	Key  string `json:"key"`
 }
