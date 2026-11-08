@@ -13,7 +13,8 @@ export class StashService {
 
         return j.stashes.map((i) => {
             const hasKey = datesWithKey.has(i.date);
-            return {...i, hasKey, displayImage: ""};
+            const displayImage = this.getRandomImage();
+            return {...i, hasKey, displayImage};
         });
     }
 
@@ -32,5 +33,19 @@ export class StashService {
                 return r;
             },
         );
+    }
+
+    private getRandomImage(): string {
+        const r = Math.random();
+        if (r < 0.25) {
+            return "bottles.png";
+        }
+        if (r < 0.5) {
+            return "cans.png";
+        }
+        if (r < 0.75) {
+            return "pints.png";
+        }
+        return "kegs.png";
     }
 }
