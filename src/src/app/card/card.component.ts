@@ -2,9 +2,10 @@ import {Component, Input} from "@angular/core";
 import {getDayStr, getMonthStr} from "../dateUtils";
 import {RouterLink} from "@angular/router";
 import {ShortStash, UIShortStash} from "../stash-service/types";
+import {NgClass} from "@angular/common";
 
 @Component({
-    imports: [RouterLink],
+    imports: [RouterLink, NgClass],
     selector: "app-card",
     styleUrl: "./card.component.css",
     templateUrl: "./card.component.html",

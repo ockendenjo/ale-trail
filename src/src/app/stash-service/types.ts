@@ -27,6 +27,7 @@ export type ShortStash = UnlockedStash | RandomTimedStash | TimedStash;
 export type UIShortStash = ShortStash & {
     hasKey: boolean;
     displayImage: string;
+    displayClass: string;
 };
 
 export interface StashList {

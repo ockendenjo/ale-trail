@@ -2,6 +2,38 @@
     background: #ccc;
 }
 
+.fill1 {
+    background: #9f8170;
+}
+
+.fill2 {
+    background: #daa06d;
+}
+
+.fill3 {
+    background: #954535;
+}
+
+.fill5 {
+    background: #c3b091;
+}
+
+.fill6 {
+    background: #84563c;
+}
+
+.fill7 {
+    background: #cc7722;
+}
+
+.fill4 {
+    background: #cd853f;
+}
+
+.fill0 {
+    background: #826644;
+}
+
 .date-container {
     height: 36px;
     position: absolute;
