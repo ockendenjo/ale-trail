@@ -25,7 +25,7 @@ export class StashService {
     }
 
     public setStasher(date: string, stasher: Stasher) {
-        return fetch(`/api/stashes/${date}/stasher`, {method: "POST", body: JSON.stringify(stasher)}).then(
+        return fetch(`/api/stashes/${date}/stasherV2`, {method: "POST", body: JSON.stringify(stasher)}).then(
             async (r) => {
                 if (r.status === 200) {
                     const res = (await r.json()) as StasherResponse;
