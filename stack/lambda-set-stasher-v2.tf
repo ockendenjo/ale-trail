@@ -14,7 +14,7 @@ module "lambda_set_stasher_v2" {
 
 resource "aws_api_gateway_method" "set_stasher_v2" {
   rest_api_id   = aws_api_gateway_rest_api.main.id
-  resource_id   = aws_api_gateway_resource.location.id
+  resource_id   = aws_api_gateway_resource.stasher_v2.id
   http_method   = "POST"
   authorization = "NONE"
 }
