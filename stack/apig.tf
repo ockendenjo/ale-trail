@@ -32,6 +32,8 @@ resource "aws_api_gateway_deployment" "main" {
       aws_api_gateway_resource.stasher_v2,
       aws_api_gateway_method.set_stasher_v2,
       aws_api_gateway_integration.set_stasher_v2,
+      aws_api_gateway_method.delete_stasher,
+      aws_api_gateway_integration.delete_stasher,
     ]))
   }
 
