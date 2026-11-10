@@ -7,16 +7,18 @@ import {inject} from "@angular/core";
 import {KeyService} from "./key-service/key.service";
 
 const hasKey: CanActivateFn = (route) => {
-    if (route.queryParams["key"]) {
-        return true;
-    }
-
     const date = route.params["date"] || "";
     if (!date) {
         return false;
     }
 
     const keySvc = inject(KeyService);
+    const qKey = route.queryParams["key"];
+    if (qKey) {
+        keySvc.setKey(date, qKey);
+        return true;
+    }
+
     return Boolean(keySvc.getKey(date));
 };
 

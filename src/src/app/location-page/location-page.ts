@@ -4,6 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 import {take} from "rxjs";
 import {NgClass} from "@angular/common";
 import {PageState} from "../page-state";
+import {KeyService} from "../key-service/key.service";
 
 @Component({
     imports: [FormsModule, ReactiveFormsModule, NgClass],
@@ -19,15 +20,13 @@ export class LocationPage implements OnInit {
     public form: FormGroup;
 
     constructor(
-        private readonly ar: ActivatedRoute,
+        ar: ActivatedRoute,
         private readonly formBuilder: FormBuilder,
+        keySvc: KeyService,
     ) {
         ar.params.pipe(take(1)).subscribe((x) => {
             this.date = x["date"];
-        });
-
-        ar.queryParams.pipe(take(1)).subscribe((x) => {
-            this.key = x["key"];
+            this.key = keySvc.getKey(this.date);
         });
 
         this.form = this.formBuilder.group({
