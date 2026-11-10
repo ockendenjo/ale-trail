@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/ockendenjo/ale-trail/pkg/apighandler"
 	"github.com/ockendenjo/ale-trail/pkg/data"
+	"github.com/ockendenjo/ale-trail/pkg/util"
 	"github.com/ockendenjo/handler"
 )
 
@@ -56,7 +57,7 @@ func (h *LambdaHandler) handle(ctx *handler.Context, event events.APIGatewayProx
 	}
 	logger.Info("Loaded data file from S3")
 
-	foundStash, err := h.getStashForDate(logger, fileWithEtag, date, key)
+	foundStash, err := util.GetStashForDate(logger, fileWithEtag, date, key)
 	if err != nil {
 		return nil, err
 	}
@@ -69,30 +70,4 @@ func (h *LambdaHandler) handle(ctx *handler.Context, event events.APIGatewayProx
 	}
 	logger.Info("Wrote data file to S3")
 	return nil, nil
-}
-
-func (h *LambdaHandler) getStashForDate(logger *handler.Logger, fileWithEtag *data.FileWithETag, date, key string) (*data.Stash, error) {
-	var foundStash *data.Stash
-	for _, stash := range fileWithEtag.File.Stashes {
-		if stash.Date == date {
-			foundStash = stash
-			break
-		}
-	}
-
-	if foundStash == nil {
-		return nil, apighandler.HttpError{StatusCode: http.StatusNotFound, Message: "no stash found", CWLogMsg: "stash not found"}
-	}
-	logger.Info("Found stash")
-
-	switch key {
-	case foundStash.StashKey:
-		logger.Info("Authorized using stash key")
-	case fileWithEtag.File.AdminKey:
-		logger.Info("Authorized using admin key")
-	default:
-		return nil, apighandler.HttpError{StatusCode: http.StatusUnauthorized, Message: "incorrect key", CWLogMsg: "incorrect stash key"}
-	}
-
-	return foundStash, nil
 }
