@@ -18,6 +18,7 @@ resource "aws_api_gateway_deployment" "main" {
       aws_api_gateway_resource.stashes,
       aws_api_gateway_resource.date,
 
+      module.apig_set_stasher,
       aws_api_gateway_resource.location,
       aws_api_gateway_method.get_location,
       aws_api_gateway_method.put_location,
@@ -27,11 +28,6 @@ resource "aws_api_gateway_deployment" "main" {
       aws_api_gateway_integration.get_stash,
       aws_api_gateway_method.list_stashes,
       aws_api_gateway_integration.list_stashes,
-
-      # /stasher
-      aws_api_gateway_resource.stasher,
-      aws_api_gateway_method.set_stasher,
-      aws_api_gateway_integration.set_stasher,
     ]))
   }
 
@@ -67,11 +63,5 @@ resource "aws_api_gateway_resource" "date" {
 resource "aws_api_gateway_resource" "location" {
   parent_id   = aws_api_gateway_resource.date.id
   path_part   = "location"
-  rest_api_id = aws_api_gateway_rest_api.main.id
-}
-
-resource "aws_api_gateway_resource" "stasher" {
-  parent_id   = aws_api_gateway_resource.date.id
-  path_part   = "stasher"
   rest_api_id = aws_api_gateway_rest_api.main.id
 }

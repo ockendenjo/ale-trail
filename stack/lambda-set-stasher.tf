@@ -12,28 +12,16 @@ module "lambda_set_stasher" {
   }
 }
 
-resource "aws_api_gateway_method" "set_stasher" {
-  rest_api_id   = aws_api_gateway_rest_api.main.id
-  resource_id   = aws_api_gateway_resource.stasher.id
-  http_method   = "POST"
-  authorization = "NONE"
-}
 
-resource "aws_api_gateway_integration" "set_stasher" {
-  rest_api_id             = aws_api_gateway_rest_api.main.id
-  resource_id             = aws_api_gateway_method.set_stasher.resource_id
-  http_method             = aws_api_gateway_method.set_stasher.http_method
-  integration_http_method = "POST"
-  type                    = "AWS_PROXY"
-  uri                     = "arn:aws:apigateway:${data.aws_region.current.region}:lambda:path/2015-03-31/functions/${module.lambda_set_stasher.arn}/invocations"
-}
 
-resource "aws_lambda_permission" "set_stasher" {
-  statement_id  = "AllowAPIGInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = module.lambda_set_stasher.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.main.execution_arn}/*/*"
+module "apig_set_stasher" {
+  source = "github.com/ockendenjo/tfmods//apig-endpoint"
+
+  rest_api    = aws_api_gateway_rest_api.main
+  http_method = "POST"
+  path        = "stasher"
+  lambda      = module.lambda_set_stasher
+  parent_id   = aws_api_gateway_resource.date.id
 }
 
 module "iam_s3_set_stasher" {
