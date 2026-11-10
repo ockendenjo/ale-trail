@@ -3,9 +3,21 @@ import {HomePage} from "./home-page/home-page";
 import {StasherPage} from "./stasher-page/stasher-page";
 import {LocationPage} from "./location-page/location-page";
 import {StashPage} from "./stash-page/stash-page";
+import {inject} from "@angular/core";
+import {KeyService} from "./key-service/key.service";
 
 const hasKey: CanActivateFn = (route) => {
-    return Boolean(route.queryParams["key"]);
+    if (route.queryParams["key"]) {
+        return true;
+    }
+
+    const date = route.params["date"] || "";
+    if (!date) {
+        return false;
+    }
+
+    const keySvc = inject(KeyService);
+    return Boolean(keySvc.getKey(date));
 };
 
 export const routes: Routes = [
