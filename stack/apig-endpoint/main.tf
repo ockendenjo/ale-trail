@@ -6,9 +6,9 @@ resource "aws_api_gateway_method" "main" {
 }
 
 resource "aws_api_gateway_integration" "main" {
-  rest_api_id             = var.rest_api.id
-  resource_id             = var.resource_id
-  http_method             = var.http_method
+  rest_api_id             = aws_api_gateway_method.main.rest_api_id
+  resource_id             = aws_api_gateway_method.main.resource_id
+  http_method             = aws_api_gateway_method.main.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.lambda.arn}/invocations"
