@@ -12,14 +12,24 @@ module "lambda_set_stasher" {
   }
 }
 
-module "apig_set_stasher_v2" {
+module "apig_set_stasher_v3" {
   source = "./apig-endpoint"
 
   http_method = "POST"
   lambda      = module.lambda_set_stasher
   region      = data.aws_region.current.region
-  resource_id = aws_api_gateway_resource.stasher.id
+  resource_id = aws_api_gateway_resource.stasher_v3.id
   rest_api    = aws_api_gateway_rest_api.main
+}
+
+module "apig_set_stasher" {
+  source = "github.com/ockendenjo/tfmods//apig-endpoint"
+
+  rest_api    = aws_api_gateway_rest_api.main
+  http_method = "POST"
+  path        = "stasher"
+  lambda      = module.lambda_set_stasher
+  parent_id   = aws_api_gateway_resource.date.id
 }
 
 module "iam_s3_set_stasher" {

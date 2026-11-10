@@ -79,8 +79,8 @@ resource "aws_api_gateway_resource" "location" {
   rest_api_id = aws_api_gateway_rest_api.main.id
 }
 
-resource "aws_api_gateway_resource" "stasher" {
+resource "aws_api_gateway_resource" "stasher_v3" {
   parent_id   = aws_api_gateway_resource.date.id
-  path_part   = "stasher"
+  path_part   = "stasherV3"
   rest_api_id = aws_api_gateway_rest_api.main.id
 }

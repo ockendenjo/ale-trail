@@ -18,7 +18,7 @@ module "apig_delete_stasher" {
   http_method = "DELETE"
   lambda      = module.lambda_delete_stasher
   region      = data.aws_region.current.region
-  resource_id = aws_api_gateway_resource.stasher.id
+  resource_id = aws_api_gateway_resource.stasher_v3.id
   rest_api    = aws_api_gateway_rest_api.main
 }
 
