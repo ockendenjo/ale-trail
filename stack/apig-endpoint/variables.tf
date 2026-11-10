@@ -23,3 +23,8 @@ variable "lambda" {
 variable "region" {
   type = string
 }
+
+variable "create_permissions" {
+  type    = bool
+  default = true
+}
