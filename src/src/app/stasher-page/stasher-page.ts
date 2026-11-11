@@ -1,13 +1,16 @@
 import {Component, signal} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {take} from "rxjs";
 import {getDayStr, getMonthStr} from "../dateUtils";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgClass} from "@angular/common";
 import {StashService} from "../stash-service/stash.service";
+import {KeyService} from "../key-service/key.service";
+import {Contents} from "../contents/contents";
+import {StashLocation} from "../stash-location/stash-location";
 
 @Component({
-    imports: [ReactiveFormsModule, NgClass],
+    imports: [ReactiveFormsModule, NgClass, Contents, StashLocation, RouterLink],
     selector: "app-stasher-page",
     styleUrl: "./stasher-page.css",
     templateUrl: "./stasher-page.html",
@@ -22,9 +25,14 @@ export class StasherPage {
         ar: ActivatedRoute,
         private readonly formBuilder: FormBuilder,
         private readonly stashSvc: StashService,
+        keySvc: KeyService,
     ) {
         ar.params.pipe(take(1)).subscribe((x) => {
             this.date = x["date"];
+            if (keySvc.getKey(this.date)) {
+                //TODO: Check key
+                this.st.set("LOADED");
+            }
         });
 
         this.form = this.formBuilder.group({
@@ -61,7 +69,7 @@ export class StasherPage {
                 switch (r.status) {
                     case 200:
                     case 204:
-                        this.st.set("SAVED");
+                        this.st.set("LOADED");
                         break;
                     case 409:
                         this.st.set("CONFLICT");
@@ -76,4 +84,4 @@ export class StasherPage {
     }
 }
 
-type SaveState = "READY" | "SAVING" | "SAVED" | "CONFLICT" | "ERROR";
+type SaveState = "READY" | "SAVING" | "CONFLICT" | "ERROR" | "LOADING" | "LOADED";

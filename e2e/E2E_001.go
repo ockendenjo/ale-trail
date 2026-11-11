@@ -85,7 +85,7 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 		})
 
 		g.It("should show saved message", func() {
-			AwaitVisible(t, page, "div[data-testid='state-saved']")
+			AwaitVisible(t, page, "div[data-testid='state-loaded']")
 		})
 
 		g.It("should validate the data file has been updated", func() {
