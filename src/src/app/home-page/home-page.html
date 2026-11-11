@@ -7,11 +7,14 @@
         <div class="p-2 pt-4">
             <div class="mb-2">
                 Every day between now and the wassail, the location of a stash is revealed at a random time. Then it's a
-                race to get the goodies! Please volunteer to hide a stash if you are able.
+                race to get the goodies!
+                @if (s.data.hostsNeeded) {
+                    <span data-testid="hosts-needed">Please volunteer to hide a stash if you are able.</span>
+                }
             </div>
 
             <div class="grid 2xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-2">
-                @for (c of s.data; track c.date) {
+                @for (c of s.data.stashes; track c.date) {
                     <app-card [card]="c"></app-card>
                 }
             </div>

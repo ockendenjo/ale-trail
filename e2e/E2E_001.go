@@ -54,6 +54,12 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 		assert.Contains(t, text, "goodies")
 	})
 
+	g.It("should show that stashers are needed", func() {
+		vis, err := page.GetByTestId("hosts-needed").IsVisible()
+		assert.NoError(t, err)
+		assert.True(t, vis)
+	})
+
 	g.Context("Set stasher details", func() {
 		var dateStr string
 		var card playwright.Locator
