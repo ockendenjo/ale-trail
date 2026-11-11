@@ -45,6 +45,8 @@ export class StasherPage {
         });
     }
 
+    private readonly r = Math.random();
+
     public get day(): string {
         const day = this.date.split("-")[2];
         return getDayStr(day);
@@ -99,6 +101,19 @@ export class StasherPage {
             .catch(() => {
                 this.st.set("RELERROR");
             });
+    }
+
+    public getPlaceholder(): string {
+        if (this.r < 0.25) {
+            return "Name (e.g. Indi Bog)";
+        }
+        if (this.r < 0.5) {
+            return "Name (e.g. Stacha Baron Cohen)";
+        }
+        if (this.r < 0.75) {
+            return "Name (e.g. Heidi Beers)";
+        }
+        return "Name (e.g. Stasha Alexander)";
     }
 }
 
