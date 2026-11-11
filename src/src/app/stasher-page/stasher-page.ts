@@ -1,4 +1,4 @@
-import {Component, inject, signal} from "@angular/core";
+import {Component, signal} from "@angular/core";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {take} from "rxjs";
 import {getDayStr, getMonthStr} from "../dateUtils";

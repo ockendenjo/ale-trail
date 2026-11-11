@@ -83,7 +83,14 @@
                     If you are no longer able to hide goodies for the stash, please allow someone else instead.
                 </p>
 
-                <button (click)="deleteStasher()" class="input-button" type="button" data-testid="button-delete-stasher">Release</button>
+                <button
+                    (click)="deleteStasher()"
+                    class="input-button"
+                    type="button"
+                    data-testid="button-delete-stasher"
+                >
+                    Release
+                </button>
             </div>
         }
         @case ("RELERROR") {
