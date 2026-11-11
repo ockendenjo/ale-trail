@@ -15,31 +15,11 @@
             </p>
 
             <p class="mb-2">
-                The stash will need to be sufficiently hidden so that members of the public won't come across it
-                inadvertently.
-            </p>
-
-            <p class="mb-2">
                 The location of the stash will need to be submitted by 9PM (unless agreed otherwise with John).
             </p>
 
-            <h2 class="text-2xl font-bold mt-2 mb-4">Contents</h2>
-
-            <p class="mb-2">Please hide:</p>
-
-            <ul class="list-disc list-inside">
-                <li class="list-item">3 (or more) beers or ciders</li>
-                <li>Optionally: other fermented goods</li>
-                <li>Optionally: other festive treats</li>
-            </ul>
-
-            <h2 class="text-2xl font-bold mt-2 mb-4">Location</h2>
-
-            <p class="mb-2">
-                The stash can be anywhere - but, as guidance, consider Holyrood Park, The Meadows, Blackford hill,
-                outside your house or in your garden. At the weekend, consider the Pentlands or the location of a
-                Cross-Country race.
-            </p>
+            <stash-contents></stash-contents>
+            <stash-location></stash-location>
 
             <h2 class="text-2xl font-bold mt-2 mb-4">Sign Up</h2>
 
@@ -83,8 +63,20 @@
         @case ("SAVING") {
             <div data-tesid="state-saving">Submitting...</div>
         }
-        @case ("SAVED") {
-            <div data-testid="state-saved">Saved - we'll be in touch with a reminder email nearer the time</div>
+        @case ("LOADING") {
+            <div data-testid="state-loading">Checking stasher...</div>
+        }
+        @case ("LOADED") {
+            <div data-testid="state-loaded">
+                <p class="mb-2">You are the stasher for {{ day }} {{ month }} - thank you for volunteering.</p>
+
+                <p>You will be sent reminder emails nearer the time.</p>
+
+                <stash-contents></stash-contents>
+                <stash-location></stash-location>
+
+                <a routerLink="../location" class="link">Set stash location</a>
+            </div>
         }
         @case ("CONFLICT") {
             <div data-testid="state-conflict">This stash already has a volunteer stasher.</div>
