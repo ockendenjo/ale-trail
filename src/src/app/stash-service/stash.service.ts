@@ -36,6 +36,12 @@ export class StashService {
         );
     }
 
+    public deleteStasher(date: string, key: string): Promise<void> {
+        return fetch(`/api/stashes/${date}/stasherV2?key=${key}`, {method: "DELETE"}).then(() => {
+            this.keySvc.removeKey(date);
+        });
+    }
+
     private getRandomImage(): string {
         const r = Math.random();
         if (r < 0.25) {

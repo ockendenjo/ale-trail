@@ -107,7 +107,7 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 		})
 	})
 
-	g.Context("Set stash location", func() {
+	g.Context("Set stash location using URL", func() {
 		const (
 			description = "Base of tree at west end of the meadows"
 			w3w         = "///assets.grab.clouds"
@@ -220,6 +220,101 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 
 		g.It("should show saved message", func() {
 			AwaitVisible(t, page, "div[data-testid='state-conflict']")
+		})
+
+		g.It("should go back to home page", func() {
+			err := page.GetByTestId("home-link").Click()
+			assert.NoError(t, err)
+		})
+	})
+
+	g.Context("Set and delete stasher", func() {
+		var dateStr string
+		var card playwright.Locator
+		var s6Key string
+
+		g.BeforeAll(func() {
+			dateStr = now.AddDate(0, 0, 3).Format(time.DateOnly)
+			card = page.GetByTestId(dateStr)
+		})
+
+		g.It("should check card contains expected text", func() {
+			text, err := card.InnerText()
+			assert.NoError(t, err)
+			assert.Contains(t, text, "Stasher needed")
+		})
+
+		g.It("should click a card", func() {
+			err := card.Click()
+			assert.NoError(t, err)
+		})
+
+		g.It("should check URL", func() {
+			AwaitURL(t, page, dateStr+"/stasher")
+		})
+
+		g.It("should enter details in the form", func() {
+			FillFormControlInput(t, page, "name", "Harry Trotter")
+			FillFormControlInput(t, page, "email", "harry@example.com")
+			SubmitForm(t, page)
+		})
+
+		g.It("should show saved message", func() {
+			AwaitVisible(t, page, "div[data-testid='state-loaded']")
+		})
+
+		g.It("should validate the data file has been updated", func() {
+			file := lh.AwaitDataFile(func(file *data.File) bool {
+				return file.Stashes[6].Stasher != nil
+			})
+			s6 := file.Stashes[6]
+			assert.Equal(t, "Harry Trotter", s6.Stasher.Name)
+			assert.Equal(t, "harry@example.com", s6.Stasher.Email)
+			s6Key = s6.StashKey
+		})
+
+		g.It("should show link to location page", func() {
+			link := page.GetByTestId("link-location")
+			err := link.Click()
+			assert.NoError(t, err)
+		})
+
+		g.It("should check URL", func() {
+			AwaitURL(t, page, dateStr+"/location")
+		})
+
+		g.It("should go back to stasher page", func() {
+			_, err := page.GoBack()
+			assert.NoError(t, err)
+			AwaitURL(t, page, dateStr+"/stasher")
+		})
+
+		g.It("should show saved message", func() {
+			AwaitVisible(t, page, "div[data-testid='state-loaded']")
+		})
+
+		g.It("should show delete stasher button", func() {
+			err := page.GetByTestId("button-delete-stasher").Click()
+			assert.NoError(t, err)
+		})
+
+		g.It("should have navigated to the home page", func() {
+			AwaitURL(t, page, "")
+		})
+
+		g.It("should validate the data file has been updated", func() {
+			file := lh.AwaitDataFile(func(file *data.File) bool {
+				return file.Stashes[6].Stasher == nil
+			})
+			s6 := file.Stashes[6]
+			assert.NotEqual(t, s6Key, s6.StashKey)
+		})
+
+		g.It("should check card contains expected text", func() {
+			card = page.GetByTestId(dateStr)
+			text, err := card.InnerText()
+			assert.NoError(t, err)
+			assert.Contains(t, text, "Stasher needed")
 		})
 	})
 })

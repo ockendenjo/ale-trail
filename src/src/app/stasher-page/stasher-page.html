@@ -75,8 +75,19 @@
                 <stash-contents></stash-contents>
                 <stash-location></stash-location>
 
-                <a routerLink="../location" class="link">Set stash location</a>
+                <a routerLink="../location" class="link" data-testid="link-location">Set stash location</a>
+
+                <h2 class="text-2xl font-bold mt-2 mb-4">Release Stash</h2>
+
+                <p class="mb-2">
+                    If you are no longer able to hide goodies for the stash, please allow someone else instead.
+                </p>
+
+                <button (click)="deleteStasher()" class="input-button" type="button" data-testid="button-delete-stasher">Release</button>
             </div>
+        }
+        @case ("RELERROR") {
+            <div data-testid="state-relerror">Something went wrong releasing the stash</div>
         }
         @case ("CONFLICT") {
             <div data-testid="state-conflict">This stash already has a volunteer stasher.</div>
