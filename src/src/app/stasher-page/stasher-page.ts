@@ -1,5 +1,5 @@
 import {Component, signal} from "@angular/core";
-import {ActivatedRoute, RouterLink} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {take} from "rxjs";
 import {getDayStr, getMonthStr} from "../dateUtils";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -17,6 +17,7 @@ import {StashLocation} from "../stash-location/stash-location";
 })
 export class StasherPage {
     private date: string = "";
+    private key?: string;
     public st = signal<SaveState>("READY");
 
     public form: FormGroup;
@@ -25,11 +26,14 @@ export class StasherPage {
         ar: ActivatedRoute,
         private readonly formBuilder: FormBuilder,
         private readonly stashSvc: StashService,
-        keySvc: KeyService,
+        private readonly keySvc: KeyService,
+        private readonly router: Router,
     ) {
         ar.params.pipe(take(1)).subscribe((x) => {
             this.date = x["date"];
-            if (keySvc.getKey(this.date)) {
+            const key = keySvc.getKey(this.date);
+            if (key) {
+                this.key = key;
                 //TODO: Check key
                 this.st.set("LOADED");
             }
@@ -82,6 +86,20 @@ export class StasherPage {
                 this.st.set("ERROR");
             });
     }
+
+    public deleteStasher(): void {
+        this.st.set("RELEASING");
+        const key = this.keySvc.getKey(this.date);
+
+        this.stashSvc
+            .deleteStasher(this.date, key)
+            .then(() => {
+                this.router.navigateByUrl("");
+            })
+            .catch(() => {
+                this.st.set("RELERROR");
+            });
+    }
 }
 
-type SaveState = "READY" | "SAVING" | "CONFLICT" | "ERROR" | "LOADING" | "LOADED";
+type SaveState = "READY" | "SAVING" | "CONFLICT" | "ERROR" | "LOADING" | "LOADED" | "RELEASING" | "RELERROR";
