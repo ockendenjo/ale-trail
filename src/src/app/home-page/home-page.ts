@@ -12,7 +12,7 @@ import {gitCount} from "../build";
     templateUrl: "./home-page.html",
 })
 export class HomePage implements OnInit {
-    public st = signal<PageState<UIShortStash[]>>({state: "LOADING"});
+    public st = signal<PageState<PageData>>({state: "LOADING"});
 
     constructor(private readonly stashSvc: StashService) {}
 
@@ -20,7 +20,11 @@ export class HomePage implements OnInit {
         this.stashSvc
             .listStashes()
             .then((res) => {
-                this.st.set({state: "LOADED", data: res});
+                const data: PageData = {
+                    stashes: res,
+                    hostsNeeded: res.some((i) => i.locked && i.hostNeeded),
+                };
+                this.st.set({state: "LOADED", data});
             })
             .catch((err) => {
                 this.st.set({state: "ERROR", error: err});
@@ -28,4 +32,9 @@ export class HomePage implements OnInit {
     }
 
     protected readonly gitCount = gitCount;
+}
+
+interface PageData {
+    stashes: UIShortStash[];
+    hostsNeeded: boolean;
 }
