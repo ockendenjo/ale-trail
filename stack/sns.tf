@@ -10,8 +10,9 @@ resource "aws_sns_topic_policy" "alarms_topic" {
 
 data "aws_iam_policy_document" "alarms_topic" {
   statement {
-    sid    = "AllowCloudWatch"
-    effect = "Allow"
+    sid     = "AllowCloudWatch"
+    effect  = "Allow"
+    actions = ["sns:Publish"]
     principals {
       type        = "Service"
       identifiers = ["cloudwatch.amazonaws.com"]
