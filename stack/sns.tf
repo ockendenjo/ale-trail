@@ -1,5 +1,5 @@
 resource "aws_sns_topic" "alarms_topic" {
-  name = "ale-trail-alarm-topic-${var.env}"
+  name         = "ale-trail-alarm-topic-${var.env}"
   display_name = "Ale Trail Alarms (${var.env})"
 }
 
