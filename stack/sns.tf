@@ -1,5 +1,6 @@
 resource "aws_sns_topic" "alarms_topic" {
-  display_name = "ale-trail-alarm-topic-${var.env}"
+  name         = "ale-trail-alarm-topic-${var.env}"
+  display_name = "Ale Trail Alarms (${var.env})"
 }
 
 resource "aws_sns_topic_policy" "alarms_topic" {
