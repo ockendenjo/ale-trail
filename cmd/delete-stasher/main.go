@@ -53,6 +53,10 @@ func (h *LambdaHandler) handle(ctx *handler.Context, event events.APIGatewayProx
 		return nil, err
 	}
 
+	if foundStash.Details != nil {
+		return nil, apighandler.HttpError{StatusCode: http.StatusBadRequest, Message: "cannot remove stasher when a location is set", CWLogMsg: "stash had a location set - refusing to delete stasher"}
+	}
+
 	foundStash.Stasher = nil
 	foundStash.StashKey = uuid.New().String()
 	logger.Info("Removed stasher and rotated stash key")
