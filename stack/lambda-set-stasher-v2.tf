@@ -6,6 +6,7 @@ module "lambda_set_stasher_v2" {
   permissions_boundary_arn = var.permissions_boundary_arn
   s3_bucket                = var.binary_bucket
   s3_object_key            = local.manifest["set-stasher"]
+  alarm_topic_arn          = aws_sns_topic.alarms_topic.arn
 
   environment = {
     DATA_BUCKET = aws_s3_bucket.data.id

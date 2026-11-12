@@ -6,6 +6,7 @@ module "lambda_list_stashes" {
   permissions_boundary_arn = var.permissions_boundary_arn
   s3_bucket                = var.binary_bucket
   s3_object_key            = local.manifest["list-stashes"]
+  alarm_topic_arn          = aws_sns_topic.alarms_topic.arn
 
   environment = {
     DATA_BUCKET = aws_s3_bucket.data.id
