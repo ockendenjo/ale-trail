@@ -67,6 +67,8 @@ directory: stack
 mkdir -p tfvars
 aws s3 cp s3://ale-trail-dev-state-20260822135440864900000002/dev.auto.tfvars tfvars/
 aws s3 cp s3://ale-trail-dev-state-20260822135440864900000002/dev.backend.tfvars tfvars/
+aws s3 cp s3://ale-trail-pro-state-20261107134939439300000002/pro.auto.tfvars tfvars/ 
+aws s3 cp s3://ale-trail-pro-state-20261107134939439300000002/pro.backend.tfvars tfvars/ 
 ```
 
 ### push-dev-data
