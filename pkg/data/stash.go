@@ -24,6 +24,9 @@ func (s *Stash) IsUnlocked(instant time.Time) bool {
 	if s.Details == nil {
 		return false
 	}
+	if s.Image == "" {
+		return false
+	}
 	td := s.Date + "T" + s.ReleaseTime + ":00Z"
 	tm, err := time.Parse("2006-01-02T15:04:05Z", td)
 	if err != nil {

@@ -20,8 +20,19 @@ func Test_IsLocked(t *testing.T) {
 				Date:        "2026-11-01",
 				ReleaseTime: "12:00",
 				Details:     &Details{},
+				Image:       "sample.jpeg",
 			},
 			exp: false,
+		},
+		{
+			name: "should return true when stash time in the past BUT image not set",
+			stash: &Stash{
+				Date:        "2026-11-01",
+				ReleaseTime: "12:00",
+				Details:     &Details{},
+				Image:       "",
+			},
+			exp: true,
 		},
 		{
 			name: "should return true when stash time in the past and details NOT set",
@@ -29,6 +40,7 @@ func Test_IsLocked(t *testing.T) {
 				Date:        "2026-11-01",
 				ReleaseTime: "12:00",
 				Details:     nil,
+				Image:       "sample.jpeg",
 			},
 			exp: true,
 		},
