@@ -6,6 +6,7 @@ import (
 	"github.com/mxschmitt/playwright-go"
 	"github.com/ockendenjo/ale-trail/pkg/data"
 	"github.com/ockendenjo/ale-trail/pkg/generator"
+	"github.com/ockendenjo/handler"
 	g "github.com/onsi/ginkgo/v2"
 	"github.com/stretchr/testify/assert"
 )
@@ -19,11 +20,13 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 		now      time.Time
 		adminKey string
 		s4Key    string
+		email    string
 	)
 
 	g.BeforeAll(func() {
 		t = g.GinkgoT()
 		lh = NewLogHelper(t)
+		email = handler.MustGetEnv("E2E_TEST_EMAIL")
 	})
 
 	g.Context("reset data file", func() {
@@ -86,7 +89,7 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 
 		g.It("should enter details in the form", func() {
 			FillFormControlInput(t, page, "name", "Harry Trotter")
-			FillFormControlInput(t, page, "email", "harry@example.com")
+			FillFormControlInput(t, page, "email", email)
 			SubmitForm(t, page)
 		})
 
@@ -100,7 +103,7 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 			})
 			s4 := file.Stashes[4]
 			assert.Equal(t, "Harry Trotter", s4.Stasher.Name)
-			assert.Equal(t, "harry@example.com", s4.Stasher.Email)
+			assert.Equal(t, email, s4.Stasher.Email)
 			s4Key = s4.StashKey
 		})
 
@@ -207,7 +210,7 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 			s5 := file.Stashes[5]
 			s5.Stasher = &data.Stasher{
 				Name:  "Stasher Baron Cohen",
-				Email: "sbc@example.com",
+				Email: email,
 			}
 			lh.PutDataFile(file)
 		})
@@ -220,7 +223,7 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 
 		g.It("should enter details in the form", func() {
 			FillFormControlInput(t, page, "name", "Harry Trotter")
-			FillFormControlInput(t, page, "email", "harry@example.com")
+			FillFormControlInput(t, page, "email", email)
 			SubmitForm(t, page)
 		})
 
@@ -261,7 +264,7 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 
 		g.It("should enter details in the form", func() {
 			FillFormControlInput(t, page, "name", "Harry Trotter")
-			FillFormControlInput(t, page, "email", "harry@example.com")
+			FillFormControlInput(t, page, "email", email)
 			SubmitForm(t, page)
 		})
 
@@ -275,7 +278,7 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 			})
 			s6 := file.Stashes[6]
 			assert.Equal(t, "Harry Trotter", s6.Stasher.Name)
-			assert.Equal(t, "harry@example.com", s6.Stasher.Email)
+			assert.Equal(t, email, s6.Stasher.Email)
 			s6Key = s6.StashKey
 		})
 

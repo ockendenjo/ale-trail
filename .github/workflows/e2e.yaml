@@ -7,6 +7,8 @@ on:
         required: true
       AWS_ROLE_ARN:
         required: true
+      E2E_TEST_EMAIL:
+        required: true
 
 permissions:
   contents: read
@@ -51,4 +53,5 @@ jobs:
       - name: Run E2E tests
         env:
           DATA_BUCKET: ${{ secrets.DATA_BUCKET }}
+          E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
         run: go test ./e2e/... -v
