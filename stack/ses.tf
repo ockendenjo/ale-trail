@@ -1,27 +1,43 @@
 resource "aws_ses_domain_identity" "main" {
-  count  = var.env == "pro" ? 1 : 0
-  domain = var.zone_domain
+  domain = var.cloudfront.domain
 }
 
 resource "aws_route53_record" "ses_verification" {
-  count   = var.env == "pro" ? 1 : 0
   zone_id = data.aws_route53_zone.primary.zone_id
-  name    = "_amazonses.${var.zone_domain}"
+  name    = "_amazonses.${aws_ses_domain_identity.main.domain}"
   type    = "TXT"
   ttl     = "600"
-  records = [aws_ses_domain_identity.main[0].verification_token]
+  records = [aws_ses_domain_identity.main.verification_token]
 }
 
 resource "aws_ses_domain_dkim" "main" {
-  count  = var.env == "pro" ? 1 : 0
-  domain = aws_ses_domain_identity.main[0].domain
+  domain = aws_ses_domain_identity.main.domain
 }
 
 resource "aws_route53_record" "ses_dkim" {
-  count   = var.env == "pro" ? 3 : 0
+  count   = 3
   zone_id = data.aws_route53_zone.primary.zone_id
-  name    = "${aws_ses_domain_dkim.main[0].dkim_tokens[count.index]}._domainkey"
+  name    = "${aws_ses_domain_dkim.main.dkim_tokens[count.index]}._domainkey"
   type    = "CNAME"
   ttl     = "600"
-  records = ["${aws_ses_domain_dkim.main[0].dkim_tokens[count.index]}.dkim.amazonses.com"]
+  records = ["${aws_ses_domain_dkim.main.dkim_tokens[count.index]}.dkim.amazonses.com"]
+}
+
+locals {
+  sestopic = ["Bounce", "Complaint", "Delivery"]
+}
+
+resource "aws_sns_topic" "ses" {
+  for_each = toset(local.sestopic)
+
+  name = "ale-trail-ses-${lower(each.key)}-${var.env}"
+}
+
+resource "aws_ses_identity_notification_topic" "ses" {
+  for_each = toset(local.sestopic)
+
+  topic_arn                = aws_sns_topic.ses[each.key].arn
+  notification_type        = each.key
+  identity                 = aws_ses_domain_identity.main.domain
+  include_original_headers = true
 }
