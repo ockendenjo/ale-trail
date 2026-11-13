@@ -73,6 +73,7 @@ jobs:
     secrets:
       DATA_BUCKET: ${{ secrets.DATA_BUCKET }}
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+      E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
 
   tf-pro:
     name: tf-pro
