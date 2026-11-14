@@ -58,6 +58,8 @@ func (h *lambdaHandler) handle(ctx *handler.Context, detail eventDetail) (any, e
 	switch detail.Template {
 	case "DAY-2":
 		return h.dayMinus2(ctx, fileWithEtag)
+	case "DAY-1":
+		return h.dayMinus1(ctx, fileWithEtag)
 	default:
 		return nil, errors.New("unknown email template")
 	}
