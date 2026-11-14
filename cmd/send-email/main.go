@@ -60,6 +60,8 @@ func (h *lambdaHandler) handle(ctx *handler.Context, detail eventDetail) (any, e
 		return h.dayMinus2(ctx, fileWithEtag)
 	case "DAY-1":
 		return h.dayMinus1(ctx, fileWithEtag)
+	case "OVERDUE":
+		return h.overdue(ctx, fileWithEtag)
 	default:
 		return nil, errors.New("unknown email template")
 	}

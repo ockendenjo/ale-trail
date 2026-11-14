@@ -24,8 +24,8 @@ func (h *lambdaHandler) dayMinus1(ctx *handler.Context, file *data.FileWithETag)
 	}
 
 	if maybeStash.Stasher == nil {
-		err := h.sendTopicMessage(ctx, fmt.Sprintf("Stash for %s does not have a stasher - not sending email", dateStr))
-		return nil, err
+		ctx.GetLogger().Info("Stasher not set - exiting")
+		return nil, nil
 	}
 
 	tpl, err := template.New("dayMinus2").Parse(string(dayMinus2Template))
