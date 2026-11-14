@@ -1,0 +1,9 @@
+Thank you for volunteering to hide a stash for the Wassail Ale Trail.
+
+The details for your stash are now overdue. Please add them to the website now using the following link:
+
+{{.LocationLink}}
+
+ATFB,
+
+John
