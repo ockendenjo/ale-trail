@@ -38,10 +38,7 @@ func (h *lambdaHandler) overdue(ctx *handler.Context, file *data.FileWithETag) (
 		return nil, err
 	}
 
-	data := dayMinus1Data{
-		StashDOM:     date.Format("02"),
-		StashDOW:     date.Format("Mon"),
-		StashMonth:   date.Format("Jan"),
+	data := overdueData{
 		LocationLink: fmt.Sprintf("https://%s/%s/location?key=%s", h.domain, dateStr, maybeStash.StashKey),
 	}
 
@@ -52,4 +49,8 @@ func (h *lambdaHandler) overdue(ctx *handler.Context, file *data.FileWithETag) (
 
 	err = h.sendEmail(ctx, maybeStash.Stasher.Email, "Ale Trail - Add stash location now", buf.String())
 	return nil, err
+}
+
+type overdueData struct {
+	LocationLink string
 }

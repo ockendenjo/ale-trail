@@ -50,7 +50,7 @@ module "schedule_d_minus_2" {
   source              = "./schedule"
   lambda              = module.lambda_send_email
   name                = "ale-trail-D-minus-2-${var.env}"
-  schedule_expression = "cron(15 22 * * ? *)"
+  schedule_expression = "cron(30 19 * * ? *)"
   template_id         = "DAY-2"
 }
 
@@ -58,6 +58,14 @@ module "schedule_d_minus_1" {
   source              = "./schedule"
   lambda              = module.lambda_send_email
   name                = "ale-trail-D-minus-1-${var.env}"
-  schedule_expression = "cron(5 8 * * ? *)"
+  schedule_expression = "cron(0 8 * * ? *)"
   template_id         = "DAY-1"
+}
+
+module "schedule_overdue" {
+  source              = "./schedule"
+  lambda              = module.lambda_send_email
+  name                = "ale-trail-overdue-${var.env}"
+  schedule_expression = "cron(0 21 * * ? *)"
+  template_id         = "OVERDUE"
 }

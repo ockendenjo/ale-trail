@@ -28,7 +28,7 @@ func (h *lambdaHandler) dayMinus1(ctx *handler.Context, file *data.FileWithETag)
 		return nil, nil
 	}
 
-	tpl, err := template.New("dayMinus2").Parse(string(dayMinus2Template))
+	tpl, err := template.New("dayMinus2").Parse(string(dayMinus1Template))
 	if err != nil {
 		return nil, err
 	}
