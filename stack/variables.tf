@@ -43,3 +43,7 @@ variable "zone_domain" {
   description = "Route 53 Hosted Zone ID"
   type        = string
 }
+
+variable "reply_to_addr" {
+  type = string
+}
