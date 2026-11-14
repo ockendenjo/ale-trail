@@ -62,6 +62,8 @@ func (h *lambdaHandler) handle(ctx *handler.Context, detail eventDetail) (any, e
 		return h.dayMinus1(ctx, fileWithEtag)
 	case "OVERDUE":
 		return h.overdue(ctx, fileWithEtag)
+	case "IMAGE-CHECK":
+		return h.imageCheck(ctx, fileWithEtag)
 	default:
 		return nil, errors.New("unknown email template")
 	}
