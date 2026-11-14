@@ -48,6 +48,12 @@ func (h *lambdaHandler) overdue(ctx *handler.Context, file *data.FileWithETag) (
 	}
 
 	err = h.sendEmail(ctx, maybeStash.Stasher.Email, "Ale Trail - Add stash location now", buf.String())
+	if err != nil {
+		return nil, err
+	}
+
+	msg := fmt.Sprintf("Stash for %s does not have a location set", dateStr)
+	err = h.sendTopicMessage(ctx, msg)
 	return nil, err
 }
 
