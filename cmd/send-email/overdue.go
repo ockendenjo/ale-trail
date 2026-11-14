@@ -50,6 +50,6 @@ func (h *lambdaHandler) overdue(ctx *handler.Context, file *data.FileWithETag) (
 		return nil, err
 	}
 
-	err = h.sendEmail(ctx, maybeStash.Stasher.Email, "Ale Trail - Hide your stash tomorrow", buf.String())
+	err = h.sendEmail(ctx, maybeStash.Stasher.Email, "Ale Trail - Add stash location now", buf.String())
 	return nil, err
 }
