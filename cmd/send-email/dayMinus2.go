@@ -15,38 +15,49 @@ import (
 var dayMinus2Template []byte
 
 func (h *lambdaHandler) dayMinus2(ctx *handler.Context, file *data.FileWithETag) (any, error) {
-	date := time.Now().AddDate(0, 0, 2)
-	dateStr := date.Format(time.DateOnly)
-	maybeStash := file.GetStashForDate(dateStr)
+	revealDate := time.Now().AddDate(0, 0, 2)
+	revealDateStr := revealDate.Format(time.DateOnly)
+	maybeStash := file.GetStashForDate(revealDateStr)
 	if maybeStash == nil {
 		ctx.GetLogger().Info("Stash not found")
 		return nil, nil
 	}
 
 	if maybeStash.Stasher == nil {
-		err := h.sendTopicMessage(ctx, fmt.Sprintf("Stash for %s does not have a stasher - not sending email", dateStr))
+		err := h.sendTopicMessage(ctx, fmt.Sprintf("Stash for %s does not have a stasher - not sending email", revealDateStr))
 		return nil, err
 	}
 
-	tpl, err := template.New("dayMinus2").Parse(string(dayMinus2Template))
+	emailBody, err := h.getDayMinus2Text(revealDate, maybeStash)
 	if err != nil {
 		return nil, err
 	}
 
+	err = h.sendEmail(ctx, maybeStash.Stasher.Email, "Ale Trail - Hide your stash tomorrow", emailBody)
+	return nil, err
+}
+
+func (h *lambdaHandler) getDayMinus2Text(revealDate time.Time, stash *data.Stash) (string, error) {
+	tpl, err := template.New("dayMinus2").Parse(string(dayMinus2Template))
+	if err != nil {
+		return "", err
+	}
+
+	revealDateStr := revealDate.Format(time.DateOnly)
+	hideDate := revealDate.AddDate(0, 0, -1)
+
 	data := dayMinus2Data{
-		StashDOM:     date.Format("02"),
-		StashDOW:     date.Format("Mon"),
-		StashMonth:   date.Format("Jan"),
-		LocationLink: fmt.Sprintf("https://%s/%s/location?key=%s", h.domain, dateStr, maybeStash.StashKey),
+		StashDOM:     hideDate.Format("02"),
+		StashDOW:     hideDate.Format("Mon"),
+		StashMonth:   hideDate.Format("Jan"),
+		LocationLink: fmt.Sprintf("https://%s/%s/location?key=%s", h.domain, revealDateStr, stash.StashKey),
 	}
 
 	buf := new(bytes.Buffer)
 	if err = tpl.Execute(buf, data); err != nil {
-		return nil, err
+		return "", err
 	}
-
-	err = h.sendEmail(ctx, maybeStash.Stasher.Email, "Ale Trail - Hide your stash tomorrow", buf.String())
-	return nil, err
+	return buf.String(), nil
 }
 
 type dayMinus2Data struct {

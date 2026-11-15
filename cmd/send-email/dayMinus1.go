@@ -15,8 +15,8 @@ import (
 var dayMinus1Template []byte
 
 func (h *lambdaHandler) dayMinus1(ctx *handler.Context, file *data.FileWithETag) (any, error) {
-	date := time.Now().AddDate(0, 0, 1)
-	dateStr := date.Format(time.DateOnly)
+	revealDate := time.Now().AddDate(0, 0, 1)
+	dateStr := revealDate.Format(time.DateOnly)
 	maybeStash := file.GetStashForDate(dateStr)
 	if maybeStash == nil {
 		ctx.GetLogger().Info("Stash not found")
@@ -28,25 +28,37 @@ func (h *lambdaHandler) dayMinus1(ctx *handler.Context, file *data.FileWithETag)
 		return nil, nil
 	}
 
-	tpl, err := template.New("dayMinus2").Parse(string(dayMinus1Template))
+	text, err := h.getDayMinus1Text(revealDate, maybeStash)
 	if err != nil {
 		return nil, err
 	}
 
+	err = h.sendEmail(ctx, maybeStash.Stasher.Email, "Ale Trail - Hide your stash today", text)
+	return nil, err
+}
+
+func (h *lambdaHandler) getDayMinus1Text(revealDate time.Time, stash *data.Stash) (string, error) {
+	tpl, err := template.New("dayMinus1").Parse(string(dayMinus1Template))
+	if err != nil {
+		return "", err
+	}
+
+	revealDateStr := revealDate.Format(time.DateOnly)
+
+	hideDate := revealDate.AddDate(0, 0, -1)
+
 	data := dayMinus1Data{
-		StashDOM:     date.Format("02"),
-		StashDOW:     date.Format("Mon"),
-		StashMonth:   date.Format("Jan"),
-		LocationLink: fmt.Sprintf("https://%s/%s/location?key=%s", h.domain, dateStr, maybeStash.StashKey),
+		StashDOM:     hideDate.Format("02"),
+		StashDOW:     hideDate.Format("Mon"),
+		StashMonth:   hideDate.Format("Jan"),
+		LocationLink: fmt.Sprintf("https://%s/%s/location?key=%s", h.domain, revealDateStr, stash.StashKey),
 	}
 
 	buf := new(bytes.Buffer)
 	if err = tpl.Execute(buf, data); err != nil {
-		return nil, err
+		return "", err
 	}
-
-	err = h.sendEmail(ctx, maybeStash.Stasher.Email, "Ale Trail - Hide your stash today", buf.String())
-	return nil, err
+	return buf.String(), nil
 }
 
 type dayMinus1Data struct {
