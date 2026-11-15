@@ -4,7 +4,7 @@ Today ({{.StashDOW}} {{.StashDOM}} {{.StashMonth}}), you need to hide your stash
 
 Please hide:
 
-- 3 (or more) beers or ciders
+- 3 (or more) beers or ciders. Variety is good. AF allowed. No lager.
 - Optionally: other fermented goods
 - Optionally: other festive treats
 
