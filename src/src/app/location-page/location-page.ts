@@ -18,6 +18,7 @@ export class LocationPage implements OnInit {
     public pg = signal<LocationPageState>({state: "LOADING"});
 
     public form: FormGroup;
+    public coords = "";
 
     constructor(
         ar: ActivatedRoute,
@@ -42,6 +43,12 @@ export class LocationPage implements OnInit {
         fetch(`/api/stashes/${this.date}/location?key=${this.key}`, {method: "GET"})
             .then((r) => r.json())
             .then((j: StashDetails) => {
+                if (j.lat === 0) {
+                    j.lat = null as unknown as number;
+                }
+                if (j.lon === 0) {
+                    j.lon = null as unknown as number;
+                }
                 this.form.setValue(j);
                 this.pg.set({state: "LOADED", data: undefined});
             })
@@ -71,6 +78,28 @@ export class LocationPage implements OnInit {
     public editAgain(): void {
         this.pg.set({state: "LOADED", data: undefined});
     }
+
+    public updateLatLon(): void {
+        const s = this.coords.trim();
+        const parts = s.split(" ");
+        if (parts.length != 4) {
+            return;
+        }
+
+        const p1 = parts[0] + " " + parts[1];
+        const p2 = parts[2] + " " + parts[3];
+
+        try {
+            const c1 = parseDm(p1);
+            const c2 = parseDm(p2);
+
+            this.form.get("lat")?.setValue(c1);
+            this.form.get("lon")?.setValue(c2);
+            this.coords = "";
+        } catch {
+            return;
+        }
+    }
 }
 
 type LocationPageState = PageState<void> | StateSaving | StateSaved;
@@ -89,4 +118,17 @@ interface StashDetails {
     w3w: string;
     description: string;
     contents: string;
+}
+
+function parseDm(input: string): number {
+    const match = input.trim().match(/^([NSWE])\s*(\d{1,3})[°\s]+(\d+(?:\.\d+)?)['′\s]*$/);
+
+    if (!match) throw new Error(`Invalid coordinate: ${input}`);
+
+    const [, hemisphere, degrees, minutes] = match;
+    const sign = "SW".includes(hemisphere) ? -1 : 1;
+
+    const d = sign * (Number(degrees) + Number(minutes) / 60);
+    const n = Math.pow(10, 6);
+    return Math.floor(d * n) / n;
 }
