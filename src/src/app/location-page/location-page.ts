@@ -37,7 +37,7 @@ export class LocationPage implements OnInit {
             lon: [undefined, [Validators.required]],
             w3w: ["", [Validators.required]],
             description: ["", [Validators.required, Validators.maxLength(200)]],
-            contents: ["", [Validators.required, Validators.maxLength(200)]],
+            contents: ["", [ Validators.maxLength(200)]],
         });
     }
 
