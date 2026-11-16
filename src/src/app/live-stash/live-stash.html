@@ -1,0 +1,46 @@
+<p class="mt-1 mb-1">The stash is live. Go go go...</p>
+
+<p class="mt-1 mb-1">
+    If you find the stash, please message the WorldService or WhatsKrap - reporting whether there are any goodies left.
+</p>
+
+<p class="mt-1 mb-1">Please remove any empty cans, bottles, wrappers, bags etc.</p>
+
+<div class="text-2xl font-bold mb-4 mt-2">Stash location</div>
+
+<app-stash-map [stash]="stash"></app-stash-map>
+
+<h3 class="text-2xl font-bold mb-4 mt-2">Description</h3>
+<p class="mt-1 mb-1">{{ stash.description }}</p>
+
+@if (stash.contents.length) {
+    <h3 class="text-2xl font-bold mb-4 mt-2">Contents</h3>
+    <p class="mt-1 mb-1">{{ stash.contents }}</p>
+}
+
+<h3 class="text-2xl font-bold mb-4 mt-2">Links</h3>
+
+<div class="link w3w">
+    <img src="w3w.png" height="32" width="32" alt="w3w" /><a [href]="getW3WAppUrl(stash)" target="_blank"
+        >{{ stash.w3w }} (app)</a
+    >
+</div>
+<div class="link w3w">
+    <img src="w3w.png" height="32" width="32" alt="w3w" /><a [href]="getW3WWebUrl(stash)" target="_blank"
+        >{{ stash.w3w }} (web)</a
+    >
+</div>
+
+<div class="link gmaps">
+    <img src="maps.png" height="24" width="24" alt="Google Maps" />
+    <a [href]="getGoogleMapsUrl(stash)" target="_blank">Google Maps</a>
+</div>
+
+<div class="link apple">
+    <img src="apple.png" height="24" width="20" alt="Apple Maps" />
+    <a [href]="getAppleMapsUrl(stash)" target="_blank">Apple Maps</a>
+</div>
+
+<div class="link noimg">
+    <a [href]="getGeoURI(stash)" target="_blank">geo:URI</a>
+</div>
