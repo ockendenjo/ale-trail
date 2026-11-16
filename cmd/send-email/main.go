@@ -19,6 +19,7 @@ func main() {
 		bucketName := handler.MustGetEnv("DATA_BUCKET")
 		replyTo := handler.MustGetEnv("REPLY_TO")
 		domain := handler.MustGetEnv("DOMAIN")
+		awsEnv := handler.MustGetEnv("AWS_ENV")
 
 		sesClient := ses.NewFromConfig(awsConfig)
 		s3Client := s3.NewFromConfig(awsConfig)
@@ -31,6 +32,7 @@ func main() {
 			snsClient:     snsClient,
 			alarmTopicARN: alarmTopicARN,
 			domain:        domain,
+			awsEnv:        awsEnv,
 		}
 		return h.handle
 	})
@@ -43,6 +45,7 @@ type lambdaHandler struct {
 	snsClient     *sns.Client
 	domain        string
 	replyTo       string
+	awsEnv        string
 }
 
 func (h *lambdaHandler) handle(ctx *handler.Context, detail eventDetail) (any, error) {
@@ -91,7 +94,7 @@ func (h *lambdaHandler) sendEmail(ctx *handler.Context, toAddr, subject, message
 			Subject: &sesTypes.Content{Data: &subject},
 			Body:    &sesTypes.Body{Text: &sesTypes.Content{Data: &message}},
 		},
-		Source:           new(fmt.Sprintf("noreply@%s", h.domain)),
+		Source:           h.getSource(),
 		ReplyToAddresses: []string{h.replyTo},
 	})
 	if err != nil {
@@ -100,6 +103,16 @@ func (h *lambdaHandler) sendEmail(ctx *handler.Context, toAddr, subject, message
 
 	ctx.GetLogger().Info("Sent email")
 	return nil
+}
+
+func (h *lambdaHandler) getSource() *string {
+	prefix := ""
+	if h.awsEnv == "dev" {
+		prefix = "[dev] "
+	}
+
+	source := fmt.Sprintf("%sHBT Ale Trail <noreply@%s>", prefix, h.domain)
+	return &source
 }
 
 type eventDetail struct {
