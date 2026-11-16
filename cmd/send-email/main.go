@@ -16,7 +16,8 @@ import (
 func main() {
 	handler.BuildAndStart(func(awsConfig aws.Config) handler.Handler[eventDetail, any] {
 		alarmTopicARN := handler.MustGetEnv("ALARM_TOPIC_ARN")
-		bucketName := handler.MustGetEnv("DATA_BUCKET")
+		dataBucket := handler.MustGetEnv("DATA_BUCKET")
+		webBucket := handler.MustGetEnv("WEB_BUCKET")
 		replyTo := handler.MustGetEnv("REPLY_TO")
 		domain := handler.MustGetEnv("DOMAIN")
 
@@ -25,7 +26,8 @@ func main() {
 		snsClient := sns.NewFromConfig(awsConfig)
 
 		h := &lambdaHandler{
-			dataClient:    data.NewClient(s3Client, bucketName),
+			dataClient:    data.NewClient(s3Client, dataBucket),
+			webBucket:     webBucket,
 			sesClient:     sesClient,
 			replyTo:       replyTo,
 			snsClient:     snsClient,
@@ -43,6 +45,7 @@ type lambdaHandler struct {
 	snsClient     *sns.Client
 	domain        string
 	replyTo       string
+	webBucket     string
 }
 
 func (h *lambdaHandler) handle(ctx *handler.Context, detail eventDetail) (any, error) {
