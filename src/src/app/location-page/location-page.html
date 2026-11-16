@@ -6,26 +6,28 @@
             <div data-testid="state-loading">Loading...</div>
         }
         @case ("LOADED") {
-            <form [formGroup]="form" (submit)="submit()">
-                <div class="mb-8">
-                    <label class="input-label" for="w3w">What Three Words (W3W)</label>
-                    <input type="text" id="w3w" class="input-txt" placeholder="W3W" formControlName="w3w" />
-                </div>
+            <div class="flex flex-row">
+                <div class="flex-1">
+                    <form [formGroup]="form" (submit)="submit()">
+                        <div class="mb-8">
+                            <label class="input-label" for="w3w">What Three Words (W3W)</label>
+                            <input type="text" id="w3w" class="input-txt" placeholder="W3W" formControlName="w3w" />
+                        </div>
 
-                <p class="mt-2 mb-2">To display the map on the stash page, decimal coordinates are needed.</p>
-                <p class="mt-2 mb-2">
+                        <p class="mt-2 mb-2">To display the map on the stash page, decimal coordinates are needed.</p>
+                            <p class="mt-2 mb-2">
                     Either enter these directly in the latitude and longitude fields below, or use
-                    <a
-                        href="https://www.geocachingtoolbox.com/index.php?lang=en&page=w3w"
-                        target="_blank"
-                        rel="noopener"
-                        class="text-blue-600"
-                        >geocachingtoolbox.com</a
-                    >
-                    to convert W3W to coordinates.
-                </p>
+                            <a
+                                href="https://www.geocachingtoolbox.com/index.php?lang=en&page=w3w"
+                                target="_blank"
+                                rel="noopener"
+                                class="text-blue-600"
+                                >geocachingtoolbox.com</a
+                            >
+                            to convert W3W to coordinates.
+                        </p>
 
-                <div class="mb-8">
+                        <div class="mb-8">
                     <label class="input-label" for="lat">Pasted coordinates</label>
                     <input
                         type="text"
@@ -38,60 +40,69 @@
                 </div>
 
                 <div>
-                    <label class="input-label" for="lat">Latitude</label>
-                    <input
-                        type="number"
-                        step="0.00001"
-                        id="lat"
-                        class="input-txt"
-                        placeholder="Latitude (e.g. 55.94785)"
-                        formControlName="lat"
-                    />
-                </div>
+                            <label class="input-label" for="lat">Latitude</label>
+                            <input
+                                type="number"
+                                step="0.00001"
+                                id="lat"
+                                class="input-txt"
+                                placeholder="Latitude (e.g. 55.94785)"
+                                formControlName="lat"
+                            />
+                        </div>
 
-                <div>
-                    <label class="input-label" for="lon">Longitude</label>
-                    <input
-                        type="number"
-                        step="0.00001"
-                        id="lon"
-                        class="input-txt"
-                        placeholder="Longitude (e.g. -3.16556)"
-                        formControlName="lon"
-                    />
-                </div>
+                        <div>
+                            <label class="input-label" for="lon">Longitude</label>
+                            <input
+                                type="number"
+                                step="0.00001"
+                                id="lon"
+                                class="input-txt"
+                                placeholder="Longitude (e.g. -3.16556)"
+                                formControlName="lon"
+                            />
+                        </div>
 
-                <div>
-                    <label class="input-label" for="description">Description of location</label>
-                    <textarea
-                        id="description"
-                        class="input-txt"
-                        placeholder="Location description (e.g. base of big tree)"
-                        formControlName="description"
-                    ></textarea>
-                </div>
+                        <div>
+                            <label class="input-label" for="description">Description of location</label>
+                            <textarea
+                                id="description"
+                                class="input-txt"
+                                placeholder="Location description (e.g. base of big tree)"
+                                formControlName="description"
+                            ></textarea>
+                        </div>
 
-                <div>
-                    <label class="input-label" for="contents">Contents (optional)</label>
-                    <textarea
-                        id="contents"
-                        class="input-txt"
-                        placeholder="What's in the stash? (e.g. 2 beers)"
-                        formControlName="contents"
-                    ></textarea>
-                </div>
+                        <div>
+                            <label class="input-label" for="contents">Contents (optional)</label>
+                            <textarea
+                                id="contents"
+                                class="input-txt"
+                                placeholder="What's in the stash? (e.g. 2 beers)"
+                                formControlName="contents"
+                            ></textarea>
+                        </div>
 
-                <div class="mt-4">
-                    <button
-                        class="input-button"
-                        type="submit"
-                        [disabled]="form.invalid"
-                        [ngClass]="{'cursor-not-allowed': form.invalid}"
-                    >
-                        Submit
-                    </button>
+                        <div class="mt-4">
+                            <button
+                                class="input-button"
+                                type="submit"
+                                [disabled]="form.invalid"
+                                [ngClass]="{'cursor-not-allowed': form.invalid}"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+                <div class="flex-1">
+                    @let st = getStash();
+                    @if (st && form.valid) {
+                        <h2 class="text-2xl font-bold mt-2 mb-4">Preview</h2>
+                        <app-live-stash [stash]="st"></app-live-stash>
+                    }
+                </div>
+            </div>
         }
         @case ("ERROR") {
             <div data-testid="state-error">Something went wrong</div>
