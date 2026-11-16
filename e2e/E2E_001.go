@@ -326,4 +326,47 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 			assert.Contains(t, text, "Stasher needed")
 		})
 	})
+
+	g.Context("Set stash location using coordinates", func() {
+		const (
+			description = "Base of tree at west end of the meadows"
+			contents    = "2 tins of Jarl"
+		)
+
+		var dateStr string
+
+		g.BeforeAll(func() {
+			dateStr = now.AddDate(0, 0, 1).Format(time.DateOnly)
+		})
+
+		g.It("Should go to stash location page", func() {
+			urlPath := dateStr + "/location?key=" + s4Key
+			NavigateTo(t, page, urlPath)
+
+			AwaitVisible(t, page, "input#lat")
+			AwaitVisible(t, page, "input#lon")
+		})
+
+		g.It("Should fill form", func() {
+			fillLocatorInput(t, page.GetByTestId("input-coordinates"), "coordinates", "N55° 56.576' W003° 09.556'")
+			FillFormControlInput(t, page, "w3w", "extra.poet.flying")
+			SubmitForm(t, page)
+		})
+
+		g.It("should validate the data file has been updated", func() {
+			file := lh.AwaitDataFile(func(file *data.File) bool {
+				return file.Stashes[4].Details.W3W == "extra.poet.flying"
+			})
+			deets := file.Stashes[4].Details
+
+			exp := data.Details{
+				Contents:    contents,
+				Description: description,
+				Lat:         55.942933,
+				Lon:         -3.159267,
+				W3W:         "extra.poet.flying",
+			}
+			assert.Equal(t, exp, *deets)
+		})
+	})
 })
