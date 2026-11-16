@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input} from "@angular/core";
+import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from "@angular/core";
 import {FullUnlockedStash} from "../stash-service/types";
 import {Feature, Map as OLMap, View} from "ol";
 import TileLayer from "ol/layer/Tile";
@@ -16,10 +16,26 @@ import {Circle as CircleStyle, Fill, Stroke, Style} from "ol/style";
     styleUrl: "./stash-map.css",
     templateUrl: "./stash-map.html",
 })
-export class StashMap implements AfterViewInit {
+export class StashMap implements AfterViewInit, OnChanges {
     @Input({required: true}) stash!: FullUnlockedStash;
 
-    private map?: OLMap;
+    private feature?: Feature;
+    private mapView?: View;
+
+    ngOnChanges(changes: SimpleChanges<{stash: FullUnlockedStash}>) {
+        if (!changes.stash?.currentValue) {
+            return;
+        }
+
+        const lat = changes.stash.currentValue.lat;
+        const lon = changes.stash.currentValue.lon;
+        if (lat == 0 || lon == 0) {
+            return;
+        }
+
+        this.feature?.setGeometry(new Point(fromLonLat([lon, lat])));
+        this.mapView?.setCenter(fromLonLat([lon, lat]));
+    }
 
     ngAfterViewInit() {
         setTimeout(() => {
@@ -41,8 +57,9 @@ export class StashMap implements AfterViewInit {
 
         const mapView = new View({maxZoom: 19});
         mapView.setZoom(13);
+        this.mapView = mapView;
 
-        this.map = new OLMap({
+        new OLMap({
             controls: defaultControls().extend([new ScaleLine()]),
             target: "stash-map",
             layers: [osmLayer, layer],
@@ -50,19 +67,20 @@ export class StashMap implements AfterViewInit {
             view: mapView,
         });
 
-        this.addFeature(source);
+        this.feature = this.addFeature(source);
 
         mapView.setCenter(fromLonLat([this.stash.lon, this.stash.lat]));
         mapView.setZoom(16);
     }
 
-    private addFeature(source: VectorSource) {
+    private addFeature(source: VectorSource): Feature {
         const feature = new Feature({
             geometry: new Point(fromLonLat([this.stash.lon, this.stash.lat])),
         });
 
         feature.setStyle(this.getStyle());
         source.addFeature(feature);
+        return feature;
     }
 
     private getStyle(): Style {

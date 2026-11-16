@@ -5,9 +5,11 @@ import {take} from "rxjs";
 import {NgClass} from "@angular/common";
 import {PageState} from "../page-state";
 import {KeyService} from "../key-service/key.service";
+import {LiveStash} from "../live-stash/live-stash";
+import {FullUnlockedStash} from "../stash-service/types";
 
 @Component({
-    imports: [FormsModule, ReactiveFormsModule, NgClass],
+    imports: [FormsModule, ReactiveFormsModule, NgClass, LiveStash],
     selector: "app-location-page",
     styleUrl: "./location-page.css",
     templateUrl: "./location-page.html",
@@ -77,6 +79,16 @@ export class LocationPage implements OnInit {
 
     public editAgain(): void {
         this.pg.set({state: "LOADED", data: undefined});
+    }
+
+    public getStash(): FullUnlockedStash | undefined {
+        return {
+            ...this.form.value,
+            date: this.date,
+            hasKey: false,
+            image: "",
+            locked: false,
+        };
     }
 
     public updateLatLon(): void {
