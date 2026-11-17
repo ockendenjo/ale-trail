@@ -25,6 +25,7 @@ func (h *lambdaHandler) imageCheck(ctx *handler.Context, file *data.FileWithETag
 
 	if maybeStash.Image != "" {
 		ctx.GetLogger().Info("Image set - exiting")
+		return nil, nil
 	}
 
 	msg := fmt.Sprintf("Stash for %s does not have an image set", dateStr)
