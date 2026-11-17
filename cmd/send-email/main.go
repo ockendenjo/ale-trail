@@ -20,6 +20,7 @@ func main() {
 		webBucket := handler.MustGetEnv("WEB_BUCKET")
 		replyTo := handler.MustGetEnv("REPLY_TO")
 		domain := handler.MustGetEnv("DOMAIN")
+		awsEnv := handler.MustGetEnv("AWS_ENV")
 
 		sesClient := ses.NewFromConfig(awsConfig)
 		s3Client := s3.NewFromConfig(awsConfig)
@@ -33,6 +34,7 @@ func main() {
 			snsClient:     snsClient,
 			alarmTopicARN: alarmTopicARN,
 			domain:        domain,
+			awsEnv:        awsEnv,
 		}
 		return h.handle
 	})
@@ -46,6 +48,7 @@ type lambdaHandler struct {
 	domain        string
 	replyTo       string
 	webBucket     string
+	awsEnv        string
 }
 
 func (h *lambdaHandler) handle(ctx *handler.Context, detail eventDetail) (any, error) {
@@ -67,6 +70,8 @@ func (h *lambdaHandler) handle(ctx *handler.Context, detail eventDetail) (any, e
 		return h.overdue(ctx, fileWithEtag)
 	case "IMAGE-CHECK":
 		return h.imageCheck(ctx, fileWithEtag)
+	case "TIDY-UP":
+		return h.tidyUp(ctx, fileWithEtag)
 	default:
 		return nil, errors.New("unknown email template")
 	}
@@ -94,7 +99,7 @@ func (h *lambdaHandler) sendEmail(ctx *handler.Context, toAddr, subject, message
 			Subject: &sesTypes.Content{Data: &subject},
 			Body:    &sesTypes.Body{Text: &sesTypes.Content{Data: &message}},
 		},
-		Source:           new(fmt.Sprintf("noreply@%s", h.domain)),
+		Source:           h.getSource(),
 		ReplyToAddresses: []string{h.replyTo},
 	})
 	if err != nil {
@@ -103,6 +108,16 @@ func (h *lambdaHandler) sendEmail(ctx *handler.Context, toAddr, subject, message
 
 	ctx.GetLogger().Info("Sent email")
 	return nil
+}
+
+func (h *lambdaHandler) getSource() *string {
+	prefix := ""
+	if h.awsEnv == "dev" {
+		prefix = "[dev] "
+	}
+
+	source := fmt.Sprintf("%sHBT Ale Trail <noreply@%s>", prefix, h.domain)
+	return &source
 }
 
 type eventDetail struct {

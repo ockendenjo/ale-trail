@@ -77,3 +77,11 @@ module "schedule_image_check" {
   schedule_expression = "cron(0 12 * * ? *)"
   template_id         = "IMAGE-CHECK"
 }
+
+module "schedule_tidy_up" {
+  source              = "./schedule"
+  lambda              = module.lambda_send_email
+  name                = "ale-trail-tidy-up-${var.env}"
+  schedule_expression = "cron(0 15 * * ? *)"
+  template_id         = "TIDY-UP"
+}
