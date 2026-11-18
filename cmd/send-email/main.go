@@ -53,7 +53,7 @@ type lambdaHandler struct {
 }
 
 func (h *lambdaHandler) handle(ctx *handler.Context, detail eventDetail) (any, error) {
-	ctx.GetLogger().AddParam("input", detail)
+	ctx.GetLogger()
 
 	fileWithEtag, err := h.dataClient.GetDataFile(ctx)
 	if err != nil {

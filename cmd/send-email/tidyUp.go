@@ -14,19 +14,21 @@ var tidyUpTemplate []byte
 func (h *lambdaHandler) tidyUp(ctx *handler.Context, file *data.FileWithETag) (any, error) {
 	revealDate := time.Now().AddDate(0, 0, -1)
 	revealDateStr := revealDate.Format(time.DateOnly)
+	logger := ctx.GetLogger().AddParam("date", revealDateStr)
+
 	maybeStash := file.GetStashForDate(revealDateStr)
 	if maybeStash == nil {
-		ctx.GetLogger().Info("Stash not found")
+		logger.Info("Stash not found")
 		return nil, nil
 	}
 
 	if maybeStash.Stasher == nil {
-		ctx.GetLogger().Info("Stasher not set - ignoring")
+		logger.Info("Stasher not set - ignoring")
 		return nil, nil
 	}
 
 	if maybeStash.Details == nil {
-		ctx.GetLogger().Info("Details not set - ignoring")
+		logger.Info("Details not set - ignoring")
 		return nil, nil
 	}
 
