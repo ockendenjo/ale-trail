@@ -63,6 +63,8 @@ func (h *lambdaHandler) handle(ctx *handler.Context, detail eventDetail) (any, e
 	ctx.GetLogger().AddParam("template", detail.Template)
 
 	switch detail.Template {
+	case "DAY-7":
+		return h.dayMinus7(ctx, fileWithEtag)
 	case "DAY-2":
 		return h.dayMinus2(ctx, fileWithEtag)
 	case "DAY-1":
