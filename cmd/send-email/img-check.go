@@ -26,13 +26,14 @@ func (h *lambdaHandler) imageCheck(ctx *handler.Context, file *data.FileWithETag
 	}
 
 	if maybeStash.Image == "" {
+		logger.Info("Stash image not set")
 		msg := fmt.Sprintf("Stash for %s does not have an image set", revealDateStr)
 		err := h.sendTopicMessage(ctx, msg)
 		return nil, err
 	}
 
 	if maybeStash.Image != "" {
-		logger.Info("Image has image set")
+		logger.Info("Stash image set")
 	}
 
 	ok, err := h.webClient.FileExists(ctx, maybeStash.Image)

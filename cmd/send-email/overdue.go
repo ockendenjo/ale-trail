@@ -15,21 +15,23 @@ import (
 var overdueTemplate []byte
 
 func (h *lambdaHandler) overdue(ctx *handler.Context, file *data.FileWithETag) (any, error) {
-	date := time.Now().AddDate(0, 0, 1)
-	dateStr := date.Format(time.DateOnly)
-	maybeStash := file.GetStashForDate(dateStr)
+	revealDate := time.Now().AddDate(0, 0, 1)
+	revealDateStr := revealDate.Format(time.DateOnly)
+	logger := ctx.GetLogger().AddParam("date", revealDateStr)
+
+	maybeStash := file.GetStashForDate(revealDateStr)
 	if maybeStash == nil {
-		ctx.GetLogger().Info("Stash not found")
+		logger.Info("Stash not found")
 		return nil, nil
 	}
 
 	if maybeStash.Stasher == nil {
-		ctx.GetLogger().Info("Stasher not set - ignoring")
+		logger.Info("Stasher not set - ignoring")
 		return nil, nil
 	}
 
 	if maybeStash.Details != nil {
-		ctx.GetLogger().Info("Details already set - exiting")
+		logger.Info("Details already set - exiting")
 		return nil, nil
 	}
 
@@ -39,7 +41,7 @@ func (h *lambdaHandler) overdue(ctx *handler.Context, file *data.FileWithETag) (
 	}
 
 	data := overdueData{
-		LocationLink: fmt.Sprintf("https://%s/%s/location?key=%s", h.domain, dateStr, maybeStash.StashKey),
+		LocationLink: fmt.Sprintf("https://%s/%s/location?key=%s", h.domain, revealDateStr, maybeStash.StashKey),
 	}
 
 	buf := new(bytes.Buffer)
@@ -52,7 +54,7 @@ func (h *lambdaHandler) overdue(ctx *handler.Context, file *data.FileWithETag) (
 		return nil, err
 	}
 
-	msg := fmt.Sprintf("Stash for %s does not have a location set", dateStr)
+	msg := fmt.Sprintf("Stash for %s does not have a location set", revealDateStr)
 	err = h.sendTopicMessage(ctx, msg)
 	return nil, err
 }

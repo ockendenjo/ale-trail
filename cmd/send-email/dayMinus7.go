@@ -17,15 +17,16 @@ var dayMinus7Template []byte
 func (h *lambdaHandler) dayMinus7(ctx *handler.Context, file *data.FileWithETag) (any, error) {
 	revealDate := time.Now().AddDate(0, 0, 7)
 	revealDateStr := revealDate.Format(time.DateOnly)
+	logger := ctx.GetLogger().AddParam("date", revealDateStr)
 
 	maybeStash := file.GetStashForDate(revealDateStr)
 	if maybeStash == nil {
-		ctx.GetLogger().Info("Stash not found")
+		logger.Info("Stash not found")
 		return nil, nil
 	}
 
 	if maybeStash.Stasher == nil {
-		ctx.GetLogger().Info("Stasher not set - exiting")
+		logger.Info("Stasher not set - exiting")
 		return nil, nil
 	}
 
