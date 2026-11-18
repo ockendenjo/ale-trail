@@ -10,13 +10,15 @@ import (
 	sesTypes "github.com/aws/aws-sdk-go-v2/service/ses/types"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
 	"github.com/ockendenjo/ale-trail/pkg/data"
+	"github.com/ockendenjo/ale-trail/pkg/web"
 	"github.com/ockendenjo/handler"
 )
 
 func main() {
 	handler.BuildAndStart(func(awsConfig aws.Config) handler.Handler[eventDetail, any] {
 		alarmTopicARN := handler.MustGetEnv("ALARM_TOPIC_ARN")
-		bucketName := handler.MustGetEnv("DATA_BUCKET")
+		dataBucket := handler.MustGetEnv("DATA_BUCKET")
+		webBucket := handler.MustGetEnv("WEB_BUCKET")
 		replyTo := handler.MustGetEnv("REPLY_TO")
 		domain := handler.MustGetEnv("DOMAIN")
 		awsEnv := handler.MustGetEnv("AWS_ENV")
@@ -26,7 +28,8 @@ func main() {
 		snsClient := sns.NewFromConfig(awsConfig)
 
 		h := &lambdaHandler{
-			dataClient:    data.NewClient(s3Client, bucketName),
+			dataClient:    data.NewClient(s3Client, dataBucket),
+			webClient:     web.NewClient(s3Client, webBucket),
 			sesClient:     sesClient,
 			replyTo:       replyTo,
 			snsClient:     snsClient,
@@ -46,6 +49,7 @@ type lambdaHandler struct {
 	domain        string
 	replyTo       string
 	awsEnv        string
+	webClient     web.Client
 }
 
 func (h *lambdaHandler) handle(ctx *handler.Context, detail eventDetail) (any, error) {

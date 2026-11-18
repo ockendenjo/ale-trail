@@ -10,25 +10,41 @@ import (
 )
 
 func (h *lambdaHandler) imageCheck(ctx *handler.Context, file *data.FileWithETag) (any, error) {
-	date := time.Now().AddDate(0, 0, 1)
-	dateStr := date.Format(time.DateOnly)
-	maybeStash := file.GetStashForDate(dateStr)
+	revealDate := time.Now().AddDate(0, 0, 1)
+	revealDateStr := revealDate.Format(time.DateOnly)
+	logger := ctx.GetLogger().AddParam("date", revealDateStr)
+
+	maybeStash := file.GetStashForDate(revealDateStr)
 	if maybeStash == nil {
-		ctx.GetLogger().Info("Stash not found")
+		logger.Info("Stash not found")
 		return nil, nil
 	}
 
 	if maybeStash.Stasher == nil {
-		ctx.GetLogger().Info("Stasher not set - exiting")
+		logger.Info("Stasher not set - exiting")
 		return nil, nil
+	}
+
+	if maybeStash.Image == "" {
+		msg := fmt.Sprintf("Stash for %s does not have an image set", revealDateStr)
+		err := h.sendTopicMessage(ctx, msg)
+		return nil, err
 	}
 
 	if maybeStash.Image != "" {
-		ctx.GetLogger().Info("Image set - exiting")
-		return nil, nil
+		logger.Info("Image has image set")
 	}
 
-	msg := fmt.Sprintf("Stash for %s does not have an image set", dateStr)
-	err := h.sendTopicMessage(ctx, msg)
-	return nil, err
+	ok, err := h.webClient.FileExists(ctx, maybeStash.Image)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		logger.Info("Image does not exist in web bucket")
+		err := h.sendTopicMessage(ctx, fmt.Sprintf("Image for %s does not exist in web bucket", revealDateStr))
+		return nil, err
+	}
+
+	logger.Info("Image exists in web bucket")
+	return nil, nil
 }
