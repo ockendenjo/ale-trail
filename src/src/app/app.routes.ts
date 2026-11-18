@@ -22,7 +22,7 @@ const hasKey: CanActivateFn = (route) => {
     return Boolean(keySvc.getKey(date));
 };
 
-const interceptKey : CanActivateFn = (route) => {
+const interceptKey: CanActivateFn = (route) => {
     const date = route.params["date"] || "";
     if (!date) {
         return false;
