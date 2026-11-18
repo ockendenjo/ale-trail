@@ -15,20 +15,27 @@ resource "aws_api_gateway_deployment" "main" {
   triggers = {
     redeployment = sha1(jsonencode([
       aws_api_gateway_resource.api,
-      aws_api_gateway_resource.stashes,
-      aws_api_gateway_resource.date,
 
+      # /stashes
+      aws_api_gateway_resource.stashes,
+      aws_api_gateway_method.list_stashes,
+      aws_api_gateway_integration.list_stashes,
+
+      # /stashes/{date}
+      aws_api_gateway_resource.date,
+      aws_api_gateway_method.get_stash,
+      aws_api_gateway_integration.get_stash,
+      aws_api_gateway_method.head_stash,
+      aws_api_gateway_integration.head_stash,
+
+      # /stashes/{date}/location
       aws_api_gateway_resource.location,
       aws_api_gateway_method.get_location,
       aws_api_gateway_method.put_location,
       aws_api_gateway_integration.get_location,
       aws_api_gateway_integration.put_location,
-      aws_api_gateway_method.get_stash,
-      aws_api_gateway_integration.get_stash,
-      aws_api_gateway_method.list_stashes,
-      aws_api_gateway_integration.list_stashes,
 
-      # /stasherV2
+      # /stashes/{date}/stasherV2
       aws_api_gateway_resource.stasher_v2,
       aws_api_gateway_method.set_stasher_v2,
       aws_api_gateway_integration.set_stasher_v2,
