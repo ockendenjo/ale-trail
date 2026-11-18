@@ -89,7 +89,7 @@ module "schedule_image_check" {
   source              = "./schedule"
   lambda              = module.lambda_send_email
   name                = "ale-trail-image-check-${var.env}"
-  schedule_expression = "cron(0 12 * * ? *)"
+  schedule_expression = "cron(0 12,22 * * ? *)"
   template_id         = "IMAGE-CHECK"
 }
 
