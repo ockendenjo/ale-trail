@@ -27,7 +27,7 @@ export class CardComponent {
         if (!c.locked) {
             return c.date;
         }
-        if (c.locked && c.hostNeeded) {
+        if (c.locked && (c.hostNeeded || c.hasKey)) {
             return c.date + "/stasher";
         }
         return undefined;
