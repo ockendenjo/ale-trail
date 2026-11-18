@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/aws/aws-sdk-go-v2/service/s3/types"
+	s3Types "github.com/aws/aws-sdk-go-v2/service/s3/types"
 )
 
 type Client interface {
@@ -29,7 +29,7 @@ func (c *client) FileExists(ctx context.Context, path string) (bool, error) {
 	})
 
 	if err != nil {
-		if _, b := errors.AsType[*types.NoSuchKey](err); b {
+		if _, b := errors.AsType[*s3Types.NoSuchKey](err); b {
 			return false, nil
 		}
 		return false, err
