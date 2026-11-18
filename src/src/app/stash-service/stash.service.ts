@@ -24,6 +24,16 @@ export class StashService {
         return await r.json();
     }
 
+    public async headStash(date: string): Promise<boolean> {
+        const key = this.keySvc.getKey(date);
+        try {
+            const res = await fetch(`/api/stashes/${date}?key=${key}`, {method: "HEAD"});
+            return res.status === 204;
+        } catch {
+            return false;
+        }
+    }
+
     public setStasher(date: string, stasher: Stasher) {
         return fetch(`/api/stashes/${date}/stasherV2`, {method: "POST", body: JSON.stringify(stasher)}).then(
             async (r) => {

@@ -17,7 +17,6 @@ import {StashLocation} from "../stash-location/stash-location";
 })
 export class StasherPage {
     private date: string = "";
-    private key?: string;
     public st = signal<SaveState>("READY");
 
     public form: FormGroup;
@@ -33,9 +32,7 @@ export class StasherPage {
             this.date = x["date"];
             const key = keySvc.getKey(this.date);
             if (key) {
-                this.key = key;
-                //TODO: Check key
-                this.st.set("LOADED");
+                this.checkKey();
             }
         });
 
@@ -114,6 +111,24 @@ export class StasherPage {
             return "Name (e.g. Heidi Beers)";
         }
         return "Name (e.g. Stasha Alexander)";
+    }
+
+    private checkKey() {
+        this.st.set("LOADING");
+        this.stashSvc
+            .headStash(this.date)
+            .then((b) => {
+                if (b) {
+                    this.st.set("LOADED");
+                } else {
+                    throw new Error("invalid key");
+                }
+            })
+            .catch(() => {
+                this.keySvc.removeKey(this.date);
+                this.st.set("ERROR");
+                this.router.navigateByUrl("");
+            });
     }
 }
 
