@@ -22,10 +22,24 @@ const hasKey: CanActivateFn = (route) => {
     return Boolean(keySvc.getKey(date));
 };
 
+const interceptKey : CanActivateFn = (route) => {
+    const date = route.params["date"] || "";
+    if (!date) {
+        return false;
+    }
+
+    const qKey = route.queryParams["key"];
+    if (qKey) {
+        const keySvc = inject(KeyService);
+        keySvc.setKey(date, qKey);
+    }
+    return true;
+};
+
 export const routes: Routes = [
     {path: "", component: HomePage, pathMatch: "full"},
     {path: ":date", component: StashPage, pathMatch: "full"},
-    {path: ":date/stasher", component: StasherPage},
+    {path: ":date/stasher", component: StasherPage, canActivate: [interceptKey]},
     {path: ":date/location", component: LocationPage, canActivate: [hasKey]},
     {path: "**", redirectTo: ""},
 ];

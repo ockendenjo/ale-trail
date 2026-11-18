@@ -369,4 +369,26 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 			assert.Equal(t, exp, *deets)
 		})
 	})
+
+	g.Context("Access stasher page using link", func() {
+		var dateStr string
+
+		g.BeforeAll(func() {
+			dateStr = now.AddDate(0, 0, 1).Format(time.DateOnly)
+		})
+
+		g.It("Should clear local storage", func() {
+			err := page.LocalStorage().Clear()
+			assert.NoError(t, err)
+		})
+
+		g.It("should go to stasher page via link", func() {
+			urlPath := dateStr + "/stasher?key=" + s4Key
+			NavigateTo(t, page, urlPath)
+		})
+
+		g.It("should show the page loaded state", func() {
+			AwaitVisible(t, page, "div[data-testid='state-loaded']")
+		})
+	})
 })
