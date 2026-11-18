@@ -390,5 +390,20 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 		g.It("should show the page loaded state", func() {
 			AwaitVisible(t, page, "div[data-testid='state-loaded']")
 		})
+
+		g.It("should navigate to home page", func() {
+			NavigateTo(t, page, "")
+		})
+
+		g.It("should click the card for the date", func() {
+			card := page.GetByTestId(dateStr)
+			err := card.Click()
+			assert.NoError(t, err)
+		})
+
+		g.It("should have navigated to the stasher page", func() {
+			AwaitURL(t, page, dateStr+"/stasher")
+			AwaitVisible(t, page, "div[data-testid='state-loaded']")
+		})
 	})
 })
