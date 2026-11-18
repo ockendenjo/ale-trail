@@ -17,7 +17,7 @@ func NewClient(s3Client *s3.Client, bucketName string) Client {
 }
 
 type client struct {
-	s3Client   s3.Client
+	s3Client   *s3.Client
 	bucketName string
 }
 
