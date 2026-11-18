@@ -1,0 +1,11 @@
+Thank you for volunteering to hide a stash for the Wassail Ale Trail on {{.RevealDOW}} {{.RevealDOM}} {{.RevealMonth}}.
+
+You will need to hide you stash on {{.StashDOW}} {{.StashDOM}} {{.StashMonth}} - an email with further instructions will be sent nearer the time.
+
+If you are no longer able to hide a stash, please release the stash using the button on the page at:
+
+{{.StasherLink}}
+
+ATFB,
+
+John

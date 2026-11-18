@@ -53,6 +53,14 @@ resource "aws_iam_role_policy" "iam_ses_send_email" {
   policy      = data.aws_iam_policy_document.iam_ses_send_email.json
 }
 
+module "schedule_d_minus_7" {
+  source              = "./schedule"
+  lambda              = module.lambda_send_email
+  name                = "ale-trail-D-minus-7-${var.env}"
+  schedule_expression = "cron(30 19 * * ? *)"
+  template_id         = "DAY-7"
+}
+
 module "schedule_d_minus_2" {
   source              = "./schedule"
   lambda              = module.lambda_send_email
