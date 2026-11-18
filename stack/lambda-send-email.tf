@@ -10,6 +10,7 @@ module "lambda_send_email" {
 
   environment = {
     DATA_BUCKET     = aws_s3_bucket.data.id
+    WEB_BUCKET      = aws_s3_bucket.static_web.id
     ALARM_TOPIC_ARN = aws_sns_topic.alarms_topic.arn
     DOMAIN          = var.cloudfront.domain
     REPLY_TO        = var.reply_to_addr
@@ -19,6 +20,12 @@ module "lambda_send_email" {
 module "iam_s3_send_email" {
   source     = "github.com/ockendenjo/tfmods//iam-s3"
   bucket_arn = aws_s3_bucket.data.arn
+  role_id    = module.lambda_send_email.role_id
+}
+
+module "iam_s3_send_email_web_bucket" {
+  source     = "github.com/ockendenjo/tfmods//iam-s3"
+  bucket_arn = aws_s3_bucket.static_web.arn
   role_id    = module.lambda_send_email.role_id
 }
 

@@ -10,6 +10,7 @@ import (
 	sesTypes "github.com/aws/aws-sdk-go-v2/service/ses/types"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
 	"github.com/ockendenjo/ale-trail/pkg/data"
+	"github.com/ockendenjo/ale-trail/pkg/web"
 	"github.com/ockendenjo/handler"
 )
 
@@ -28,7 +29,7 @@ func main() {
 
 		h := &lambdaHandler{
 			dataClient:    data.NewClient(s3Client, dataBucket),
-			webBucket:     webBucket,
+			webClient:     web.NewClient(s3Client, webBucket),
 			sesClient:     sesClient,
 			replyTo:       replyTo,
 			snsClient:     snsClient,
@@ -47,8 +48,8 @@ type lambdaHandler struct {
 	snsClient     *sns.Client
 	domain        string
 	replyTo       string
-	webBucket     string
 	awsEnv        string
+	webClient     web.Client
 }
 
 func (h *lambdaHandler) handle(ctx *handler.Context, detail eventDetail) (any, error) {
