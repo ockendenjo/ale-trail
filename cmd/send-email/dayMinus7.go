@@ -11,7 +11,7 @@ import (
 	"github.com/ockendenjo/handler"
 )
 
-//go:embed dayMinus7.txt
+//go:embed dayMinus7.template.txt
 var dayMinus7Template []byte
 
 func (h *lambdaHandler) dayMinus7(ctx *handler.Context, file *data.FileWithETag) (any, error) {
