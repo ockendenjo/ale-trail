@@ -74,7 +74,7 @@ resource "aws_api_gateway_resource" "stashes" {
 
 resource "aws_api_gateway_resource" "locations" {
   parent_id   = aws_api_gateway_resource.stashes.id
-  path_part   = "stashes"
+  path_part   = "locations"
   rest_api_id = aws_api_gateway_rest_api.main.id
 }
 
