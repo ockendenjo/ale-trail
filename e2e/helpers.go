@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/mxschmitt/playwright-go"
 	"github.com/ockendenjo/ale-trail/pkg/data"
@@ -65,6 +66,7 @@ func NavigateTo(t g.FullGinkgoTInterface, page playwright.Page, path string) {
 }
 
 func AwaitURL(t g.FullGinkgoTInterface, page playwright.Page, path string) {
+	assert.False(t, strings.HasPrefix(path, "/"), "path should not start with /")
 	url := fmt.Sprintf("%s/%s", baseURL(), path)
 	err := page.WaitForURL(url)
 	assert.NoError(t, err)

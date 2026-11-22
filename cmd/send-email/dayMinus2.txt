@@ -10,6 +10,8 @@ Please hide:
 
 The stash can be anywhere - but, as guidance, consider Holyrood Park, The Meadows, Blackford hill, outside your house or in your garden. At the weekend, consider the Pentlands or the location of a Cross-Country race.
 
+Check the location of previous stashes ({{.PreviousLink}}) and pick a different location.
+
 The stash will need to be sufficiently hidden so that members of the public won't come across it inadvertently.
 
 Use the following link to set the stash location. This must be done by 9PM tomorrow.
