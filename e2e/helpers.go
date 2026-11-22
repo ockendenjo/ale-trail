@@ -49,6 +49,13 @@ func AwaitVisible(t g.FullGinkgoTInterface, page playwright.Page, selector strin
 	assert.NoError(t, err)
 }
 
+func AwaitVisibleByTestID(t g.FullGinkgoTInterface, page playwright.Page, testID string) {
+	selector := fmt.Sprintf(`[data-testid="%s"]`, testID)
+	loc := page.Locator(selector)
+	err := playwright.NewPlaywrightAssertions(10_000).Locator(loc).ToBeVisible()
+	assert.NoError(t, err)
+}
+
 func NavigateTo(t g.FullGinkgoTInterface, page playwright.Page, path string) {
 	url := fmt.Sprintf("%s/%s", baseURL(), path)
 	res, err := page.Goto(url)

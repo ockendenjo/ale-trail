@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {FullStash, Stasher, StasherResponse, StashList, UIShortStash} from "./types";
+import {FullStash, PreviousLocations, Stasher, StasherResponse, StashList, UIShortStash} from "./types";
 import {KeyService} from "../key-service/key.service";
 
 @Injectable({providedIn: "root"})
@@ -70,5 +70,9 @@ export class StashService {
         const r = Math.random();
         const d = Math.floor(r * 8);
         return "fill" + String(d);
+    }
+
+    getPreviousLocations(): Promise<PreviousLocations> {
+        return fetch("/api/stashes/locations", {method: "GET"}).then((r) => r.json());
     }
 }
