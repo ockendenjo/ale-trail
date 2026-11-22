@@ -55,3 +55,7 @@ export interface StasherResponse {
     date: string;
     key: string;
 }
+
+export interface PreviousLocations {
+    locations: [number, number][];
+}

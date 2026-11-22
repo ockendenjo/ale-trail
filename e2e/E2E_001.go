@@ -403,7 +403,21 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 
 		g.It("should have navigated to the stasher page", func() {
 			AwaitURL(t, page, dateStr+"/stasher")
-			AwaitVisible(t, page, "div[data-testid='state-loaded']")
+			AwaitVisibleByTestID(t, page, "state-loaded")
+		})
+	})
+
+	g.Context("Previous stashes map", func() {
+		g.It("should navigate to page", func() {
+			NavigateTo(t, page, "previous-locations")
+		})
+
+		g.It("should show expected page title", func() {
+			AwaitVisibleByTestID(t, page, "state-loaded")
+		})
+
+		g.It("should display multi stash map", func() {
+			AwaitVisibleByTestID(t, page, "multi-stash-map")
 		})
 	})
 })

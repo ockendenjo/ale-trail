@@ -1,0 +1,11 @@
+:host {
+    display: block;
+    height: 600px;
+    width: 100%;
+    max-height: 50vh;
+}
+
+#stash-map {
+    height: 100%;
+    width: 100%;
+}

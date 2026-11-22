@@ -1,0 +1,23 @@
+<div class="m-4">
+    <h1 class="text-4xl font-bold mb-4">Previous stash locations</h1>
+
+    @let st = pg();
+    @switch (st.state) {
+        @case ("LOADING") {
+            <div data-testid="state-loading">Loading...</div>
+        }
+        @case ("LOADED") {
+            <div class="flex flex-col" data-testid="state-loaded">
+                <p class="mb-4">
+                    These are the locations of previous stashes. New stashes would ideally be situated in different
+                    locations.
+                </p>
+
+                <multi-stash-map [locations]="st.data.locations" data-testid="multi-stash-map"></multi-stash-map>
+            </div>
+        }
+        @case ("ERROR") {
+            <div data-testid="state-error">Something went wrong</div>
+        }
+    }
+</div>
