@@ -21,6 +21,11 @@ resource "aws_api_gateway_deployment" "main" {
       aws_api_gateway_method.list_stashes,
       aws_api_gateway_integration.list_stashes,
 
+      # /stashes/locations
+      aws_api_gateway_resource.locations,
+      aws_api_gateway_method.list_locations,
+      aws_api_gateway_integration.list_locations,
+
       # /stashes/{date}
       aws_api_gateway_resource.date,
       aws_api_gateway_method.get_stash,
@@ -63,6 +68,12 @@ resource "aws_api_gateway_resource" "api" {
 
 resource "aws_api_gateway_resource" "stashes" {
   parent_id   = aws_api_gateway_resource.api.id
+  path_part   = "stashes"
+  rest_api_id = aws_api_gateway_rest_api.main.id
+}
+
+resource "aws_api_gateway_resource" "locations" {
+  parent_id   = aws_api_gateway_resource.stashes.id
   path_part   = "stashes"
   rest_api_id = aws_api_gateway_rest_api.main.id
 }
