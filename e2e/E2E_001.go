@@ -391,6 +391,17 @@ var _ = TestCase("001", "Perform user actions on website", func() {
 			AwaitVisible(t, page, "div[data-testid='state-loaded']")
 		})
 
+		g.It("should click link for previous locations", func() {
+			AwaitVisibleByTestID(t, page, "link-prev-loc")
+			err := page.GetByTestId("link-prev-loc").Click()
+			assert.NoError(t, err)
+		})
+
+		g.It("should go to the previous location page", func() {
+			AwaitURL(t, page, "previous-locations")
+			AwaitVisibleByTestID(t, page, "state-loaded")
+		})
+
 		g.It("should navigate to home page", func() {
 			NavigateTo(t, page, "")
 		})

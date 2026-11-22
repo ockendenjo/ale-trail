@@ -11,7 +11,7 @@ import (
 	"github.com/ockendenjo/handler"
 )
 
-//go:embed dayMinus1.txt
+//go:embed dayMinus1.template.txt
 var dayMinus1Template []byte
 
 func (h *lambdaHandler) dayMinus1(ctx *handler.Context, file *data.FileWithETag) (any, error) {
@@ -54,6 +54,7 @@ func (h *lambdaHandler) getDayMinus1Text(revealDate time.Time, stash *data.Stash
 		StashDOW:     hideDate.Format("Mon"),
 		StashMonth:   hideDate.Format("Jan"),
 		LocationLink: fmt.Sprintf("https://%s/%s/location?key=%s", h.domain, revealDateStr, stash.StashKey),
+		PreviousLink: fmt.Sprintf("https://%s/previous-locations", h.domain),
 	}
 
 	buf := new(bytes.Buffer)
@@ -68,4 +69,5 @@ type dayMinus1Data struct {
 	StashDOW     string
 	StashMonth   string
 	LocationLink string
+	PreviousLink string
 }

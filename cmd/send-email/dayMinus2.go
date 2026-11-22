@@ -53,6 +53,7 @@ func (h *lambdaHandler) getDayMinus2Text(revealDate time.Time, stash *data.Stash
 		StashDOW:     hideDate.Format("Mon"),
 		StashMonth:   hideDate.Format("Jan"),
 		LocationLink: fmt.Sprintf("https://%s/%s/location?key=%s", h.domain, revealDateStr, stash.StashKey),
+		PreviousLink: fmt.Sprintf("https://%s/previous-locations", h.domain),
 	}
 
 	buf := new(bytes.Buffer)
@@ -68,4 +69,5 @@ type dayMinus2Data struct {
 	StashMonth       string
 	RequiredContents string
 	LocationLink     string
+	PreviousLink     string
 }
