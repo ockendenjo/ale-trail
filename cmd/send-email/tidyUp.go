@@ -12,7 +12,7 @@ import (
 var tidyUpTemplate []byte
 
 func (h *lambdaHandler) tidyUp(ctx *handler.Context, file *data.FileWithETag) (any, error) {
-	revealDate := time.Now().AddDate(0, 0, -1)
+	revealDate := time.Now().AddDate(0, 0, -2)
 	revealDateStr := revealDate.Format(time.DateOnly)
 	logger := ctx.GetLogger().AddParam("date", revealDateStr)
 
