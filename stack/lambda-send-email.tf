@@ -97,6 +97,6 @@ module "schedule_tidy_up" {
   source              = "./schedule"
   lambda              = module.lambda_send_email
   name                = "ale-trail-tidy-up-${var.env}"
-  schedule_expression = "cron(0 15 * * ? *)"
+  schedule_expression = "cron(0 8 * * ? *)"
   template_id         = "TIDY-UP"
 }
