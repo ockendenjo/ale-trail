@@ -72,6 +72,14 @@
                                 placeholder="Location description (e.g. base of big tree)"
                                 formControlName="description"
                             ></textarea>
+                            @if (form.get("description")?.touched && form.get("description")?.hasError("required")) {
+                                <div class="valerr">Description is required</div>
+                            }
+                            @if (form.get("description")?.hasError("maxlength")) {
+                                <div class="valerr">
+                                    Maximum length 200; Currently {{ form.value.description.length }}
+                                </div>
+                            }
                         </div>
 
                         <div>
@@ -82,6 +90,10 @@
                                 placeholder="What's in the stash? (e.g. 2 beers)"
                                 formControlName="contents"
                             ></textarea>
+
+                            @if (form.get("contents")?.hasError("maxlength")) {
+                                <div class="valerr">Maximum length 200; Currently {{ form.value.contents.length }}</div>
+                            }
                         </div>
 
                         <div class="mt-4">
@@ -89,7 +101,7 @@
                                 class="input-button"
                                 type="submit"
                                 [disabled]="form.invalid"
-                                [ngClass]="{'cursor-not-allowed': form.invalid}"
+                                [ngClass]="{'cursor-not-allowed bg-gray-300': form.invalid}"
                             >
                                 Submit
                             </button>
