@@ -14,6 +14,8 @@ type Stash struct {
 	//Maybe when locked
 	HostNeeded  *bool   `json:"hostNeeded,omitempty"`
 	ReleaseTime *string `json:"releaseTime,omitempty"`
+	HasImage    bool    `json:"hasImage"`
+	HasDetails  bool    `json:"hasDetails"`
 
 	//When unlocked
 	Image       *string  `json:"image,omitempty"`
@@ -36,6 +38,8 @@ func GetStash(data *data.Stash, fullMode bool) *Stash {
 		Date:        data.Date,
 		Locked:      locked,
 		ReleaseType: data.ReleaseType,
+		HasImage:    data.Image != "",
+		HasDetails:  data.Details != nil,
 	}
 
 	if locked {
