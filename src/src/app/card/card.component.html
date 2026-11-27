@@ -7,9 +7,6 @@
         >
             <div class="lock-container flex flex-row content-center items-center">
                 <img src="lock.svg" alt="Lock" class="p-2 w-10 h-10" />
-                @if (card.releaseType == "TIMED" && card.releaseTime) {
-                    Reveals at {{ card.releaseTime }}
-                }
             </div>
 
             <div class="central-container flex flex-col justify-center items-center">
@@ -26,14 +23,15 @@
             [ngClass]="[card.displayClass, card.hasKey ? 'hover:border-black hover:opacity-70 cursor-pointer' : '']"
         >
             <div class="lock-container flex flex-row content-center items-center">
+                @if (card.hasImage && !(card.releaseType == "TIMED" && card.releaseTime)) {
+                    <img src="image.svg" alt="Image" class="p-2 w-10 h-10" title="Image is set" />
+                }
                 <img src="lock.svg" alt="Lock" class="p-2 w-10 h-10" />
+                @if (card.hasDetails && !(card.releaseType == "TIMED" && card.releaseTime)) {
+                    <img src="location_on.svg" alt="Location on icon" class="p-2 w-10 h-10" title="Details are set" />
+                }
                 @if (card.hasKey) {
-                    <img
-                        src="location_on.svg"
-                        alt="Location icon"
-                        class="p-2 w-10 h-10"
-                        title="You are hosting this stash"
-                    />
+                    <img src="person.svg" alt="Person icon" class="p-2 w-10 h-10" title="You are hosting this stash" />
                 }
                 @if (card.releaseType == "TIMED" && card.releaseTime) {
                     Reveals at {{ card.releaseTime }}
