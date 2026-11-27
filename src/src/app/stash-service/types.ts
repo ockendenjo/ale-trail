@@ -2,6 +2,8 @@ interface BaseStash {
     date: string;
     hasKey: boolean;
     locked: boolean;
+    hasImage: boolean;
+    hasDetails: boolean;
 }
 
 interface RandomTimedStash extends BaseStash {
